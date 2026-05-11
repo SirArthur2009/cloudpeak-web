@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Photo galleries of our Labrador litters at Cloud Peak Silver Labradors." />
+  <title>Gallery — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container"><a href="index.html">Home</a><span>›</span>Gallery</div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Photo gallery</h1>
+    <p>Weekly growth photos for each puppy in every litter — watch them grow week by week.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div id="gallery-index">
+      <div class="loading-state">
+        <i class="ti ti-loader" aria-hidden="true"></i>
+        Loading galleries...
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<script src="js/supabase.js"></script>
+<script>
+async function loadGalleries() {
+  const container = document.getElementById('gallery-index');
+  try {
+    const [littersRaw, puppies] = await Promise.all([
+      db.select('litters', 'select=*&order=created_at.desc'),
+      db.select('puppies', 'select=id,litter_id,status,photo_url,color,gender,name')
+    ]);
+
+    if (!littersRaw || littersRaw.length === 0) {
+      container.innerHTML = '<div class="loading-state"><i class="ti ti-photo" aria-hidden="true"></i><br>No galleries yet. Check back soon!</div>';
+      return;
+    }
+
+    const statusOrder = { upcoming: 0, available: 1, limited: 2, placed: 3 };
+    const litters = littersRaw.sort((a, b) => {
+      const aDiff = (statusOrder[a.status] ?? 1) - (statusOrder[b.status] ?? 1);
+      if (aDiff !== 0) return aDiff;
+      const aDate = a.born_date || a.expected_date || a.created_at || '';
+      const bDate = b.born_date || b.expected_date || b.created_at || '';
+      return bDate.localeCompare(aDate);
+    });
+
+    container.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;">
+        ${litters.map(l => {
+          // Coerce both sides to string to avoid bigint vs string mismatch
+          const lp = (puppies || []).filter(p => String(p.litter_id) === String(l.id));
+          const avail = lp.filter(p => p.status === 'available').length;
+          const status = l.status || getLitterStatus(lp);
+          const thumb = lp.find(p => p.photo_url)?.photo_url;
+          const parents = [l.sire, l.dam].filter(Boolean).join(' × ');
+          return `
+            <a href="litter-gallery.html?litter=${l.id}" class="card" style="text-decoration:none;display:block;">
+              ${thumb
+                ? `<img src="${thumb}" alt="${l.name}" class="card-img" loading="lazy" />`
+                : `<div class="card-img-placeholder" style="aspect-ratio:16/9;"><i class="ti ti-photo" aria-hidden="true"></i></div>`}
+              <div class="card-body">
+                <div class="card-name">${l.name}</div>
+                ${parents ? `<div class="card-sub" style="margin-top:4px;display:flex;align-items:center;gap:5px;"><i class="ti ti-paw" style="font-size:13px;color:var(--teal);"></i>${parents}</div>` : ''}
+                <div style="margin-top:0.75rem;display:flex;align-items:center;justify-content:space-between;">
+                  <span style="font-size:13px;color:var(--grey-text);">${lp.length} ${lp.length === 1 ? 'puppy' : 'puppies'}</span>
+                  <span class="badge badge-${status === 'placed' ? 'sold' : status === 'upcoming' ? 'upcoming' : 'available'}" style="font-size:11px;">
+                    ${status === 'placed' ? 'All placed' : status === 'upcoming' ? 'Upcoming' : avail + ' available'}
+                  </span>
+                </div>
+              </div>
+            </a>`;
+        }).join('')}
+      </div>`;
+  } catch (e) {
+    container.innerHTML = `<div class="error-state"><i class="ti ti-alert-circle"></i> Couldn't load galleries right now.</div>`;
+  }
+}
+loadGalleries();
+</script>
+</body>
+</html>

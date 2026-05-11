@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cloud Peak Silver Labradors — quality silver and charcoal Labrador puppies raised with love in Colorado." />
+  <title>Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <h1>Healthy, beautiful silver &amp; charcoal Labradors</h1>
+    <p>Raised with love in Colorado. Each puppy is well-socialized and ready to be your family's perfect companion.</p>
+    <div class="hero-btns">
+      <a href="available-litters.html" class="btn btn-primary">View available litters</a>
+      <a href="waitlist.html" class="btn btn-secondary">Join the waitlist</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ── -->
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat">
+      <span class="stat-num" id="stat-dogs">6</span>
+      <span class="stat-label">Labradors in our family</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">Silver &amp; Charcoal</span>
+      <span class="stat-label">Color specialties</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-available">—</span>
+      <span class="stat-label">Puppies available now</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">Colorado</span>
+      <span class="stat-label">Based in the west</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Meet our dogs ── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Meet our dogs</h2>
+      <p>Each of our Labradors is part of the family — healthy, loving, and well cared for.</p>
+      <div class="underline"></div>
+    </div>
+    <div class="dogs-grid" id="dogs-grid">
+      <!-- Static fallback cards — replaced by JS if Supabase data loads -->
+      <a href="landry.html" class="card" style="text-decoration:none;">
+        <div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>
+        <div class="card-body">
+          <div class="card-name">Landry</div>
+          <div class="card-sub">Silver Labrador</div>
+        </div>
+      </a>
+      <a href="stella.html" class="card" style="text-decoration:none;">
+        <div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>
+        <div class="card-body">
+          <div class="card-name">Stella</div>
+          <div class="card-sub">Charcoal Labrador</div>
+        </div>
+      </a>
+      <a href="molly.html" class="card" style="text-decoration:none;">
+        <div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>
+        <div class="card-body">
+          <div class="card-name">Molly</div>
+          <div class="card-sub">Silver Labrador</div>
+        </div>
+      </a>
+      <a href="mia.html" class="card" style="text-decoration:none;">
+        <div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>
+        <div class="card-body">
+          <div class="card-name">Mia</div>
+          <div class="card-sub">Silver factored black Lab · Retired</div>
+        </div>
+      </a>
+      <a href="sadie.html" class="card" style="text-decoration:none;">
+        <div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>
+        <div class="card-body">
+          <div class="card-name">Silver Sadie</div>
+          <div class="card-sub">Silver Labrador</div>
+        </div>
+      </a>
+      <a href="ozzie.html" class="card" style="text-decoration:none;">
+        <div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>
+        <div class="card-body">
+          <div class="card-name">Ozzie</div>
+          <div class="card-sub">Red Labrador</div>
+        </div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="dogs.html" class="btn btn-outline">Meet all our dogs</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Highlight: our commitment ── -->
+<section class="highlight section">
+  <div class="container">
+    <div class="highlight-inner">
+      <div>
+        <h2>Our commitment to healthy puppies</h2>
+        <p>We specialize in silver and charcoal Labradors. Every puppy is raised in our home, well-socialized from birth, and health-checked before going to their forever family.</p>
+        <br>
+        <p>We use Early Neurological Stimulation from day three through day sixteen, giving each puppy a strong developmental foundation and the resilience to thrive in any loving home.</p>
+        <br>
+        <a href="therapy.html" class="btn btn-outline" style="border-color:var(--teal);color:var(--teal);">Learn about our program</a>
+      </div>
+      <div class="highlight-img">
+        <i class="ti ti-heart" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Available litters preview ── -->
+<section class="section" style="background:#fafaf9;">
+  <div class="container">
+    <div class="section-header">
+      <h2>Available litters</h2>
+      <p>Browse current and upcoming litters. Updated in real time.</p>
+      <div class="underline"></div>
+    </div>
+    <div id="litters-preview">
+      <div class="loading-state">
+        <i class="ti ti-loader" aria-hidden="true"></i>
+        Loading litters...
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="available-litters.html" class="btn btn-outline">View all litters</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section section">
+  <div class="container">
+    <h2>Ready to find your perfect companion?</h2>
+    <p>Fill out a puppy application or join our waitlist to be notified about upcoming litters.</p>
+    <div class="hero-btns">
+      <a href="apply.html" class="btn btn-primary">Puppy application</a>
+      <a href="waitlist.html" class="btn btn-secondary">Join the waitlist</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Our story ── -->
+<section class="our-story section">
+  <div class="container">
+    <div class="our-story-inner">
+      <h2>Our story</h2>
+      <p>We are a family that loves adventure! Our dogs travel with us regularly and have proven to be wonderful companions on the road — adaptable, easygoing, and at home in a variety of settings across the western U.S. Our children have grown to love and trust them deeply, and they have been a true asset in countless situations.</p>
+      <p>Our families provide many opportunities for our dogs to be well-socialized, engaged, and playful. We are confident that our dogs can form a deep connection with the right family, and we believe they will be a genuine asset to your home. It is our desire to share with you the joy and excellence we experience with our dogs every day.</p>
+      <p>Whether our puppies are whelped at Rosy's or Leah's, children are always involved in the process. Rosy has 25 grandchildren, some of whom play an integral role in whelping. Leah has three children who are part of the journey from day one all the way through homecoming day. Our puppies grow up surrounded by kids, new experiences, and the rhythm of everyday family life.</p>
+      <p>We use Early Neurological Stimulation from day three through day sixteen as part of our program, giving each puppy a strong developmental foundation, resilience, and healthy coping skills — so they are ready to thrive in any loving home.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Newsletter ── -->
+<section class="newsletter section-sm">
+  <div class="container">
+    <h2>Sign up to receive news and updates</h2>
+    <form class="newsletter-row" id="newsletter-form" novalidate>
+      <input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" />
+      <button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <p>© 2026 Cloud Peak Silver Labradors · Buffalo, Wyoming</p>
+    <div class="footer-links">
+      <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
+      <a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a>
+      <a href="purchase-agreement.html">Purchase agreement</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ── Scam awareness popup ── -->
+<div id="scam-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#fff;border-radius:var(--radius-lg);max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:var(--teal);padding:1.5rem 1.5rem 1rem;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">
+        <i class="ti ti-shield-check" style="font-size:24px;color:#fff;" aria-hidden="true"></i>
+        <h2 style="color:#fff;font-size:1.25rem;font-family:var(--font-sans);font-weight:500;">A note on scam awareness</h2>
+      </div>
+      <p style="color:var(--teal-mid);font-size:14px;line-height:1.6;">Due to a recent increase in puppy scams across the internet, we want to make it easy for you to verify that we are a real, legitimate family-run breeding program.</p>
+    </div>
+    <div style="padding:1.5rem;">
+      <p style="font-size:14px;color:var(--grey-text);margin-bottom:1.25rem;line-height:1.7;">We <strong style="color:var(--black);">encourage</strong> you to do your research before sending any money. Here's how you can verify us:</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;">
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-video" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">Video call us</strong> — we'll happily FaceTime or video call so you can see the puppies and our home in real time before any deposit.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-brand-facebook" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">Check our Facebook</strong> — our page has real photos, history, and families who have tagged us with their puppies.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-dna" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">Verify our dogs on Embark</strong> — our dogs have public Embark DNA profiles you can look up independently.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-certificate" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">Look up AKC registration</strong> — our dogs are AKC registered. Registration numbers can be verified directly on the AKC website.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-map-pin" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">We are in Buffalo, Wyoming</strong> — you are welcome to arrange a visit to meet us and the puppies in person before committing.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-cash" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">We only accept Venmo, check, or cash</strong> — we will never ask for wire transfers, gift cards, or cryptocurrency. If a breeder does, walk away.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--grey-text);">
+          <i class="ti ti-message" style="font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+          <span><strong style="color:var(--black);">Call or text us with questions</strong> — we welcome questions and are happy to chat. Ask us anything. Legitimate breeders have nothing to hide.</span>
+        </div>
+      </div>
+      <button onclick="closeScamPopup()" style="width:100%;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--font-sans);">
+        Got it — take me to the site
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script src="js/supabase.js"></script>
+<script>
+  // Load available puppies count
+  async function loadStats() {
+    try {
+      const puppies = await db.select('puppies', 'status=eq.available&select=id');
+      const el = document.getElementById('stat-available');
+      if (el) el.textContent = (puppies || []).length;
+    } catch (_) {}
+  }
+
+  // Load dogs grid from Supabase if photos exist
+  async function loadDogs() {
+    try {
+      const dogs = await db.select('dogs', 'select=*&order=name');
+      if (!dogs || dogs.length === 0) return; // keep static fallback
+      const grid = document.getElementById('dogs-grid');
+      const slugs = { landry: 'landry.html', stella: 'stella.html', molly: 'molly.html', mia: 'mia.html', sadie: 'sadie.html', ozzie: 'ozzie.html' };
+      grid.innerHTML = dogs.map(d => {
+        const slug = Object.keys(slugs).find(k => d.name.toLowerCase().includes(k));
+        const href = slug ? slugs[slug] : 'dogs.html';
+        return `
+          <a href="${href}" class="card" style="text-decoration:none;">
+            ${d.photo_url
+              ? `<img class="card-img" src="${d.photo_url}" alt="${d.name}" loading="lazy" />`
+              : `<div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>`
+            }
+            <div class="card-body">
+              <div class="card-name">${d.name}</div>
+              <div class="card-sub">${d.notes ? d.notes.split('.')[0] : 'Labrador'}</div>
+            </div>
+          </a>`;
+      }).join('');
+    } catch (_) {}
+  }
+
+  // Load litters preview (max 3)
+  async function loadLittersPreview() {
+    const container = document.getElementById('litters-preview');
+    try {
+      const [littersRaw, puppies] = await Promise.all([
+        db.select('litters', 'select=*&order=created_at.desc&limit=10'),
+        db.select('puppies', 'select=id,litter_id,status,color,gender,name')
+      ]);
+
+      if (!littersRaw || littersRaw.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--grey-text);">No litters currently listed. Check back soon!</p>';
+        return;
+      }
+
+      const statusOrder = { upcoming: 0, available: 1, limited: 2, placed: 3 };
+      const litters = littersRaw.sort((a, b) => {
+        const aDiff = (statusOrder[a.status] ?? 1) - (statusOrder[b.status] ?? 1);
+        if (aDiff !== 0) return aDiff;
+        const aDate = a.born_date || a.expected_date || a.created_at || '';
+        const bDate = b.born_date || b.expected_date || b.created_at || '';
+        return bDate.localeCompare(aDate);
+      });
+
+      const shown = litters.slice(0, 3);
+      container.innerHTML = shown.map(l => {
+        const lp = (puppies || []).filter(p => String(p.litter_id) === String(l.id));
+        const avail = lp.filter(p => p.status === 'available').length;
+        const status = l.status || getLitterStatus(lp);
+
+        if (status === 'upcoming') {
+          return `
+            <div class="litter-card">
+              <div class="litter-header">
+                <div>
+                  <h2>${l.name}</h2>
+                  <div class="litter-meta">
+                    <span><i class="ti ti-calendar" aria-hidden="true"></i> Expected ${l.expected_date ? new Date(l.expected_date).toLocaleDateString() : 'soon'}</span>
+                    ${l.colors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${l.colors}</span>` : ''}
+                  </div>
+                </div>
+                <span class="badge badge-upcoming">Upcoming</span>
+              </div>
+              <div class="upcoming-body">
+                <i class="ti ti-clock" aria-hidden="true"></i>
+                <div class="upcoming-text">
+                  <h3>This litter hasn't arrived yet</h3>
+                  <p>Join the waitlist to reserve your spot. <a href="waitlist.html">Join the waitlist →</a></p>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        const badgeStatus = avail === 0 ? 'placed' : avail < lp.length ? 'limited' : 'available';
+        const badgeLabels = { available: 'Puppies available', limited: 'Limited availability', placed: 'Fully placed' };
+
+        return `
+          <div class="litter-card">
+            <div class="litter-header">
+              <div>
+                <h2>${l.name}</h2>
+                <div class="litter-meta">
+                  ${l.born_date ? `<span><i class="ti ti-calendar" aria-hidden="true"></i> Born ${new Date(l.born_date).toLocaleDateString()}</span>` : ''}
+                  ${l.go_home_date ? `<span><i class="ti ti-home" aria-hidden="true"></i> Go home ${new Date(l.go_home_date).toLocaleDateString()}</span>` : ''}
+                  ${l.colors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${l.colors}</span>` : ''}
+                </div>
+              </div>
+              <span class="badge badge-${badgeStatus}">${badgeLabels[badgeStatus]}</span>
+            </div>
+            <div class="litter-body">
+              <div class="puppy-grid">
+                ${lp.map(p => `
+                  <div class="puppy-pill ${p.status}">
+                    <span class="collar-dot" style="background:${collarHex(p.color || p.collar_color || '')}"></span>
+                    <div class="puppy-pill-info">
+                      <div class="puppy-pill-name">${p.name || (p.color + ' ' + (p.gender || ''))}</div>
+                      <div class="puppy-pill-status ${p.status === 'available' ? 'avail' : p.status}">${p.status}</div>
+                    </div>
+                  </div>`).join('')}
+              </div>
+              <div class="litter-footer">
+                <div class="avail-count">
+                  ${avail > 0 ? `<strong>${avail} available</strong> of ${lp.length} puppies` : `All ${lp.length} puppies placed`}
+                </div>
+                <div class="litter-btns">
+                  <a href="gallery.html" class="btn btn-outline btn-sm">View gallery</a>
+                  ${avail > 0 ? `<a href="apply.html" class="btn btn-dark btn-sm">Apply now</a>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      container.innerHTML = `<div class="error-state"><i class="ti ti-alert-circle"></i> Couldn't load litters right now.</div>`;
+    }
+  }
+
+  loadStats();
+  loadDogs();
+  loadLittersPreview();
+
+  // Show scam popup on first visit
+  function closeScamPopup() {
+    document.getElementById('scam-popup').style.display = 'none';
+    localStorage.setItem('cpsl_popup_seen', '1');
+  }
+  window.closeScamPopup = closeScamPopup;
+  if (!localStorage.getItem('cpsl_popup_seen')) {
+    setTimeout(() => {
+      const popup = document.getElementById('scam-popup');
+      popup.style.display = 'flex';
+    }, 800);
+  }
+</script>
+</body>
+</html>

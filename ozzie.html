@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Blazing Red Ozzie — Red Labrador stud at Cloud Peak Silver Labradors." />
+  <title>Ozzie — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a><span>›</span><a href="dogs.html">Our dogs</a><span>›</span>Ozzie
+  </div>
+</nav>
+
+<!-- Deep red hero for Ozzie's coat -->
+<section class="profile-hero" style="background:#7a2e0e;">
+  <div class="container">
+    <div class="profile-hero-inner">
+      <div class="profile-img-box" id="hero-img" style="background:rgba(255,255,255,0.15);"><i class="ti ti-paw" aria-hidden="true" style="color:rgba(255,255,255,0.5);"></i></div>
+      <div>
+        <h1>Ozzie</h1>
+        <div class="profile-registered">Blazing Red Ozzie</div>
+        <div class="badge-row">
+          <span class="profile-badge">Red Labrador</span>
+          <span class="profile-badge">Male</span>
+          <span class="profile-badge">Hunting lineage</span>
+          <span class="profile-badge">Family friendly</span>
+        </div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);font-size:13px;padding:8px 16px;border-radius:50px;margin-top:0.5rem;">
+          <i class="ti ti-clock" aria-hidden="true"></i> More details coming soon
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="profile-body">
+      <div class="profile-about">
+        <h2>About Ozzie</h2>
+        <p>Ozzie is a handsome red Labrador with a classic deep red coat that turns heads wherever he goes. He has a friendly, steady temperament that makes him a natural fit around family and other dogs alike — calm, reliable, and always good-natured.</p>
+        <p>Like many of our dogs, Ozzie comes from a hunting line, bringing that same drive, intelligence, and trainability that we love in our program. We are excited to have him as part of the Cloud Peak family.</p>
+      </div>
+      <div class="profile-creds">
+        <h2>Lineage &amp; breeding</h2>
+        <ul class="cred-list">
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Red Labrador — deep classic coat</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Hunting lineage</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Friendly &amp; steady temperament</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Great with family &amp; other dogs</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Bred with Sadie</li>
+          <li><i class="ti ti-clock" aria-hidden="true"></i> Full profile details coming soon</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;">
+      <div style="background:var(--grey-bg);border-radius:var(--radius-lg);border-left:4px solid #c2410c;padding:1.25rem 1.5rem;display:flex;align-items:flex-start;gap:1rem;">
+        <i class="ti ti-info-circle" style="font-size:22px;color:#c2410c;flex-shrink:0;margin-top:2px;" aria-hidden="true"></i>
+        <p style="font-size:14px;color:var(--grey-text);line-height:1.7;">We are still putting together Ozzie's full profile including health certifications and genetic testing results. Check back soon for his complete details!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="profile-footer-note">
+  <p>Interested in a puppy from Ozzie? <a href="available-litters.html">View available litters</a> or <a href="waitlist.html">join the waitlist</a>.</p>
+</div>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<script src="js/supabase.js"></script>
+<script>
+  async function loadDogData() {
+    try {
+      const dogs = await db.select('dogs', 'name=ilike.*ozzie*&select=*');
+      const dog = dogs?.[0];
+      if (dog?.photo_url) {
+        document.getElementById('hero-img').innerHTML = `<img src="${dog.photo_url}" alt="Ozzie" style="width:100%;height:100%;object-fit:cover;" />`;
+      }
+    } catch (_) {}
+  }
+  loadDogData();
+</script>
+</body>
+</html>

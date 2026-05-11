@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Puppy profile — Cloud Peak Silver Labradors." />
+  <title>Puppy — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .puppy-photo-strip {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .puppy-photo-item {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 0.5px solid var(--grey-mid);
+      cursor: pointer;
+    }
+    .puppy-photo-item img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.2s;
+    }
+    .puppy-photo-item:hover img { transform: scale(1.01); }
+    .puppy-photo-caption {
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--grey-text);
+      background: #fafaf9;
+      border-top: 0.5px solid var(--grey-mid);
+    }
+    .lightbox {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+      z-index: 200; display: flex; align-items: center; justify-content: center;
+      padding: 1rem; cursor: pointer;
+    }
+    .lightbox img {
+      max-width: 92vw; max-height: 92vh; object-fit: contain;
+      border-radius: var(--radius-md);
+    }
+    .lightbox-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 44px; height: 44px; border-radius: 50%; font-size: 20px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-prev, .lightbox-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 44px; height: 44px; border-radius: 50%; font-size: 20px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a><span>›</span>
+    <a href="gallery.html">Gallery</a><span>›</span>
+    <a href="#" id="breadcrumb-litter">Litter</a><span>›</span>
+    <span id="breadcrumb-puppy">Puppy</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="profile-hero" id="puppy-hero">
+  <div class="container">
+    <div class="profile-hero-inner">
+      <div class="profile-img-box" id="hero-img">
+        <i class="ti ti-paw" aria-hidden="true"></i>
+      </div>
+      <div>
+        <h1 id="puppy-name">Loading...</h1>
+        <div class="profile-registered" id="puppy-litter-name"></div>
+        <div class="badge-row" id="puppy-badges"></div>
+        <div id="puppy-status-section"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div style="max-width:700px;margin:0 auto;">
+
+      <div style="margin-bottom:2.5rem;" id="puppy-details-section"></div>
+
+      <div>
+        <h2 style="font-size:1.25rem;margin-bottom:1.5rem;padding-bottom:0.6rem;border-bottom:3px solid var(--teal-light);display:inline-block;">Photos</h2>
+        <div class="puppy-photo-strip" id="photo-strip">
+          <div class="loading-state"><i class="ti ti-loader" aria-hidden="true"></i> Loading photos...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="profile-footer-note">
+  <p>Interested in this puppy? <a href="apply.html">Fill out an application</a> or <a href="waitlist.html">join the waitlist</a>.</p>
+</div>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors · Buffalo, Wyoming</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script src="js/supabase.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const puppyId = params.get('puppy');
+let allPhotos = [];
+let lightboxIndex = 0;
+
+function openLightbox(index) {
+  lightboxIndex = index;
+  const photo = allPhotos[index];
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.id = 'lightbox';
+  lb.innerHTML = `
+    <button class="lightbox-close" aria-label="Close"><i class="ti ti-x"></i></button>
+    ${allPhotos.length > 1 ? `<button class="lightbox-prev" aria-label="Previous"><i class="ti ti-chevron-left"></i></button>` : ''}
+    <img src="${photo.photo_url}" alt="${photo.caption || 'Puppy photo'}" />
+    ${allPhotos.length > 1 ? `<button class="lightbox-next" aria-label="Next"><i class="ti ti-chevron-right"></i></button>` : ''}
+  `;
+  lb.addEventListener('click', e => { if (e.target === lb) lb.remove(); });
+  lb.querySelector('.lightbox-close').addEventListener('click', () => lb.remove());
+  lb.querySelector('.lightbox-prev')?.addEventListener('click', e => { e.stopPropagation(); changeLightbox(-1); });
+  lb.querySelector('.lightbox-next')?.addEventListener('click', e => { e.stopPropagation(); changeLightbox(1); });
+  document.body.appendChild(lb);
+}
+
+function changeLightbox(dir) {
+  lightboxIndex = (lightboxIndex + dir + allPhotos.length) % allPhotos.length;
+  const lb = document.getElementById('lightbox');
+  if (lb) lb.querySelector('img').src = allPhotos[lightboxIndex].photo_url;
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox')) return;
+  if (e.key === 'ArrowLeft') changeLightbox(-1);
+  if (e.key === 'ArrowRight') changeLightbox(1);
+  if (e.key === 'Escape') document.getElementById('lightbox')?.remove();
+});
+
+async function loadPuppy() {
+  if (!puppyId) { window.location.href = 'gallery.html'; return; }
+
+  try {
+    const [puppies, photos] = await Promise.all([
+      db.select('puppies', `id=eq.${puppyId}&select=*,litters(id,name)`),
+      db.select('puppy_photos', `puppy_id=eq.${puppyId}&select=*&order=sort_order,created_at`).catch(() => [])
+    ]);
+
+    const p = puppies?.[0];
+    if (!p) { window.location.href = 'gallery.html'; return; }
+
+    allPhotos = photos || [];
+
+    // Fall back to photo_url on the puppy record if puppy_photos table is empty
+    if (allPhotos.length === 0 && p.photo_url) {
+      allPhotos = [{ photo_url: p.photo_url, caption: null }];
+    }
+    const litter = p.litters;
+
+    // Page title
+    const displayName = p.name || `${p.collar_color || p.color || ''} collar`;
+    document.title = `${displayName} — Cloud Peak Silver Labradors`;
+
+    // Breadcrumb
+    document.getElementById('breadcrumb-puppy').textContent = displayName;
+    const litterLink = document.getElementById('breadcrumb-litter');
+    litterLink.textContent = litter?.name || 'Litter';
+    if (litter?.id) litterLink.href = `litter-gallery.html?litter=${litter.id}`;
+
+    // Hero
+    document.getElementById('puppy-name').textContent = displayName;
+    document.getElementById('puppy-litter-name').textContent = litter?.name || '';
+
+    // Hero image — first photo
+    if (allPhotos.length > 0) {
+      document.getElementById('hero-img').innerHTML =
+        `<img src="${allPhotos[0].photo_url}" alt="${displayName}" style="width:100%;height:100%;object-fit:cover;" />`;
+    }
+
+    // Badges
+    const collarHexVal = collarHex(p.collar_color || '');
+    const badgesEl = document.getElementById('puppy-badges');
+    badgesEl.innerHTML = `
+      ${p.collar_color ? `<span class="profile-badge" style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:${collarHexVal};border:1.5px solid rgba(0,0,0,0.15);display:inline-block;"></span>${p.collar_color} collar</span>` : ''}
+      ${p.gender ? `<span class="profile-badge">${p.gender.charAt(0).toUpperCase() + p.gender.slice(1)}</span>` : ''}
+      ${p.color ? `<span class="profile-badge">${p.color}</span>` : ''}
+      <span class="badge badge-${p.status}">${p.status}</span>
+    `;
+
+    // Status CTA
+    const statusEl = document.getElementById('puppy-status-section');
+    if (p.status === 'available') {
+      statusEl.innerHTML = `
+        <div style="margin-top:1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a href="apply.html" class="btn btn-primary" style="background:var(--teal-light);color:var(--teal-dark);">Apply for this puppy</a>
+          <a href="waitlist.html" class="btn btn-secondary">Join the waitlist</a>
+        </div>`;
+    } else if (p.status === 'reserved') {
+      statusEl.innerHTML = `<div style="margin-top:1.25rem;font-size:14px;color:rgba(255,255,255,0.7);">This puppy is reserved. <a href="waitlist.html" style="color:var(--teal-light);">Join the waitlist</a> for future litters.</div>`;
+    } else {
+      statusEl.innerHTML = `<div style="margin-top:1.25rem;font-size:14px;color:rgba(255,255,255,0.6);">This puppy has gone home. <a href="available-litters.html" style="color:var(--teal-light);">View available litters</a>.</div>`;
+    }
+
+    // Details
+    const detailsEl = document.getElementById('puppy-details-section');
+    if (p.notes) {
+      detailsEl.innerHTML = `
+        <div class="lineage-box">
+          <p>${p.notes}</p>
+        </div>`;
+    }
+
+    // Photos strip
+    const strip = document.getElementById('photo-strip');
+    if (allPhotos.length === 0) {
+      strip.innerHTML = `<div class="loading-state"><i class="ti ti-camera" aria-hidden="true"></i><br>Photos coming soon!</div>`;
+      return;
+    }
+
+    strip.innerHTML = allPhotos.map((photo, i) => `
+      <div class="puppy-photo-item" onclick="openLightbox(${i})">
+        <img src="${photo.photo_url}" alt="${photo.caption || displayName + ' photo ' + (i+1)}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+        ${photo.caption ? `<div class="puppy-photo-caption">${photo.caption}</div>` : ''}
+      </div>`).join('');
+
+  } catch (e) {
+    document.getElementById('photo-strip').innerHTML =
+      `<div class="error-state"><i class="ti ti-alert-circle"></i> Couldn't load puppy. ${e.message}</div>`;
+  }
+}
+
+loadPuppy();
+</script>
+</body>
+</html>

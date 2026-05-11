@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Puppy gallery — Cloud Peak Silver Labradors." />
+  <title>Litter Gallery — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .puppy-grid-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 768px) {
+      .puppy-grid-gallery { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    }
+    .puppy-gallery-card {
+      background: var(--white);
+      border: 0.5px solid var(--grey-mid);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .puppy-gallery-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .puppy-gallery-img {
+      width: 100%; aspect-ratio: 1;
+      background: var(--teal-pale);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .puppy-gallery-img img { width: 100%; height: 100%; object-fit: cover; }
+    .puppy-gallery-img i { font-size: 40px; color: var(--teal); opacity: 0.4; }
+    .puppy-gallery-body { padding: 0.85rem 1rem; }
+    .puppy-gallery-name {
+      font-weight: 500; font-size: 15px; color: var(--black);
+      margin-bottom: 4px; display: flex; align-items: center; gap: 6px;
+    }
+    .puppy-gallery-sub { font-size: 12px; color: var(--grey-text); }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a><span>›</span>
+    <a href="gallery.html">Gallery</a><span>›</span>
+    <span id="breadcrumb-name">Litter</span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1 id="litter-name">Loading...</h1>
+    <p>Click any puppy to see all their photos</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div id="litter-info" style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;"></div>
+    <div id="puppies-container">
+      <div class="loading-state"><i class="ti ti-loader" aria-hidden="true"></i> Loading puppies...</div>
+    </div>
+  </div>
+</section>
+
+<div class="profile-footer-note">
+  <p>Interested in a puppy from this litter? <a href="apply.html">Fill out an application</a> or <a href="waitlist.html">join the waitlist</a>.</p>
+</div>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors · Buffalo, Wyoming</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script src="js/supabase.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const litterId = params.get('litter');
+
+async function loadGallery() {
+  if (!litterId) { window.location.href = 'gallery.html'; return; }
+  try {
+    const [litters, puppies, photos] = await Promise.all([
+      db.select('litters', `select=*&id=eq.${litterId}`),
+      db.select('puppies', `select=*&litter_id=eq.${litterId}&order=created_at`),
+      db.select('puppy_photos', `select=puppy_id,photo_url,sort_order&order=sort_order,created_at`).catch(() => [])
+    ]);
+
+    const litter = litters?.[0];
+    if (!litter) { window.location.href = 'gallery.html'; return; }
+
+    document.title = `${litter.name} — Cloud Peak Silver Labradors`;
+    document.getElementById('litter-name').textContent = litter.name;
+    document.getElementById('breadcrumb-name').textContent = litter.name;
+
+    // Show parent names under the title
+    const parents = [litter.sire, litter.dam].filter(Boolean).join(' × ');
+    if (parents) {
+      document.getElementById('litter-name').insertAdjacentHTML('afterend',
+        `<p style="color:var(--teal-mid);font-size:15px;margin-top:0.4rem;">
+          <i class="ti ti-paw" aria-hidden="true"></i> ${parents}
+        </p>`);
+    }
+
+    const infoEl = document.getElementById('litter-info');
+    const stats = [
+      litter.sire && litter.dam ? `<i class="ti ti-user" aria-hidden="true"></i> ${litter.sire} × ${litter.dam}` : null,
+      litter.born_date ? `<i class="ti ti-calendar" aria-hidden="true"></i> Born ${new Date(litter.born_date).toLocaleDateString()}` : null,
+      litter.go_home_date ? `<i class="ti ti-home" aria-hidden="true"></i> Go home ${new Date(litter.go_home_date).toLocaleDateString()}` : null,
+      litter.colors ? `<i class="ti ti-paw" aria-hidden="true"></i> ${litter.colors}` : null,
+      puppies?.length ? `<i class="ti ti-heart" aria-hidden="true"></i> ${puppies.length} ${puppies.length === 1 ? 'puppy' : 'puppies'}` : null,
+    ].filter(Boolean);
+    infoEl.innerHTML = stats.map(s =>
+      `<div style="background:var(--teal-pale);border-radius:var(--radius-md);padding:0.6rem 1rem;font-size:13px;color:var(--teal-dark);display:flex;align-items:center;gap:6px;">${s}</div>`
+    ).join('');
+
+    const container = document.getElementById('puppies-container');
+    if (!puppies || puppies.length === 0) {
+      container.innerHTML = `<div class="loading-state"><i class="ti ti-camera" aria-hidden="true"></i><br>Photos coming soon!</div>`;
+      return;
+    }
+
+    // Map puppy_id → first photo
+    const photoMap = {};
+    (photos || []).forEach(ph => {
+      if (!photoMap[ph.puppy_id]) photoMap[ph.puppy_id] = ph.photo_url;
+    });
+
+    container.innerHTML = `
+      <div class="puppy-grid-gallery">
+        ${puppies.map(p => {
+          const displayName = p.name || `${p.collar_color || p.color || ''} collar`;
+          const thumb = photoMap[p.id] || p.photo_url;          const dot = collarHex(p.collar_color || '');
+          return `
+            <a href="puppy.html?puppy=${p.id}" class="puppy-gallery-card">
+              <div class="puppy-gallery-img">
+                ${thumb ? `<img src="${thumb}" alt="${displayName}" loading="lazy" />` : `<i class="ti ti-paw" aria-hidden="true"></i>`}
+              </div>
+              <div class="puppy-gallery-body">
+                <div class="puppy-gallery-name">
+                  ${p.collar_color ? `<span style="width:12px;height:12px;border-radius:50%;background:${dot};border:1.5px solid rgba(0,0,0,0.12);flex-shrink:0;display:inline-block;"></span>` : ''}
+                  ${displayName}
+                </div>
+                <div class="puppy-gallery-sub">${[p.gender, p.color, p.status].filter(Boolean).join(' · ')}</div>
+              </div>
+            </a>`;
+        }).join('')}
+      </div>`;
+  } catch (e) {
+    document.getElementById('puppies-container').innerHTML =
+      `<div class="error-state"><i class="ti ti-alert-circle"></i> Couldn't load gallery. ${e.message}</div>`;
+  }
+}
+loadGallery();
+</script>
+</body>
+</html>

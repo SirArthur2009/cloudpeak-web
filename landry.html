@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Stonewick's Master Landry — Silver Labrador stud at Cloud Peak Silver Labradors." />
+  <title>Landry — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a><span>›</span>
+    <a href="dogs.html">Our dogs</a><span>›</span>
+    Landry
+  </div>
+</nav>
+
+<section class="profile-hero">
+  <div class="container">
+    <div class="profile-hero-inner">
+      <div class="profile-img-box" id="hero-img">
+        <i class="ti ti-paw" aria-hidden="true"></i>
+      </div>
+      <div>
+        <h1>Landry</h1>
+        <div class="profile-registered">Stonewick's Master, Landry</div>
+        <div class="badge-row">
+          <span class="profile-badge">Silver Labrador</span>
+          <span class="profile-badge">AKC Registered</span>
+          <span class="profile-badge">Male</span>
+          <span class="profile-badge">English Bloodlines</span>
+        </div>
+        <div class="ext-links" id="ext-links">
+          <a href="#" class="ext-link" id="embark-link" style="display:none;">
+            <i class="ti ti-dna" aria-hidden="true"></i> Landry's Embark profile
+          </a>
+          <a href="#" class="ext-link" id="ofa-link" style="display:none;">
+            <i class="ti ti-certificate" aria-hidden="true"></i> Landry's OFA profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="profile-body">
+      <div class="profile-about">
+        <h2>About Landry</h2>
+        <p>Landry comes from a line of Master and Senior Hunters, and it shows — he is incredibly smart and always keeps us on our toes. He loves to work, learns at lightning speed, and has an eager-to-please personality that makes him a joy to train.</p>
+        <p>Off the field, he is as sweet as they come. He wants all the pets and snuggles he can get, and he absolutely loves his toys. We are so excited to have him as part of our family, and we know his puppies carry that same wonderful combination of drive and affection.</p>
+      </div>
+      <div class="profile-creds">
+        <h2>Health &amp; credentials</h2>
+        <ul class="cred-list">
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> AKC Registered</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Clear genetic testing</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> OFA certified — heart and eyes</li>
+          <li><i class="ti ti-clock" aria-hidden="true"></i> OFA hips &amp; elbows pending (parents certified)</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Master &amp; Senior Hunter parents</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> English Bloodlines</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="profile-footer-note">
+  <p>Interested in a puppy from Landry? <a href="available-litters.html">View available litters</a> or <a href="waitlist.html">join the waitlist</a>.</p>
+</div>
+
+<section class="newsletter section-sm">
+  <div class="container">
+    <h2>Sign up to receive news and updates</h2>
+    <form class="newsletter-row" id="newsletter-form" novalidate>
+      <input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" />
+      <button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <p>© 2026 Cloud Peak Silver Labradors</p>
+    <div class="footer-links">
+      <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
+      <a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a>
+      <a href="purchase-agreement.html">Purchase agreement</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<script src="js/supabase.js"></script>
+<script>
+  async function loadDogData() {
+    try {
+      const dogs = await db.select('dogs', 'name=ilike.*landry*&select=*');
+      const dog = dogs?.[0];
+      if (!dog) return;
+      if (dog.photo_url) {
+        const box = document.getElementById('hero-img');
+        box.innerHTML = `<img src="${dog.photo_url}" alt="Landry" style="width:100%;height:100%;object-fit:cover;" />`;
+      }
+      if (dog.embark_url) {
+        const el = document.getElementById('embark-link');
+        el.href = dog.embark_url; el.style.display = 'flex';
+      }
+      if (dog.ofa_url) {
+        const el = document.getElementById('ofa-link');
+        el.href = dog.ofa_url; el.style.display = 'flex';
+      }
+    } catch (_) {}
+  }
+  loadDogData();
+</script>
+</body>
+</html>

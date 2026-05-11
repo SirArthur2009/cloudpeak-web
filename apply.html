@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Apply for a puppy from Cloud Peak Silver Labradors." />
+  <title>Puppy Application — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    @media (max-width: 768px) {
+      .apply-layout { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container"><a href="index.html">Home</a><span>›</span>Puppy application</div>
+</nav>
+
+<!-- Success state (hidden by default) -->
+<div id="success-state" style="display:none;min-height:60vh;display:none;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center;">
+  <div>
+    <div style="width:72px;height:72px;background:var(--teal-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:36px;color:var(--teal);">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+    </div>
+    <h1 style="font-size:2rem;margin-bottom:0.75rem;">Application submitted!</h1>
+    <p style="color:var(--grey-text);font-size:16px;max-width:440px;margin:0 auto 2rem;line-height:1.7;">Thank you! We've received your application and will be in touch soon. Please remember to confirm there is room on the waitlist before sending your deposit.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="available-litters.html" class="btn btn-outline">View available litters</a>
+      <a href="waitlist.html" class="btn btn-dark">Waitlist info</a>
+    </div>
+  </div>
+</div>
+
+<div id="form-state">
+  <section style="padding:3rem 0;">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:3rem;align-items:start;max-width:900px;margin:0 auto;" class="apply-layout">
+
+        <!-- Intro -->
+        <div>
+          <h1 style="font-size:2rem;font-weight:700;text-transform:uppercase;margin-bottom:1.5rem;line-height:1.2;">Puppy application</h1>
+          <p style="color:var(--grey-text);line-height:1.8;margin-bottom:1.25rem;">Anyone interested in purchasing one of our puppies must fill out our Puppy Application Form.</p>
+          <p style="color:var(--grey-text);line-height:1.8;margin-bottom:1.25rem;">Please confirm that there is still room on the waitlist for the litter you are wanting before sending your deposit.</p>
+          <p style="color:var(--grey-text);line-height:1.8;margin-bottom:1.5rem;">Please indicate the litter you are placing your deposit for in your Venmo note.</p>
+          <div style="background:var(--teal-pale);border-left:4px solid var(--teal-light);border-radius:4px;padding:0.85rem 1rem;font-size:14px;color:var(--teal-dark);line-height:1.6;">
+            <i class="ti ti-info-circle" aria-hidden="true"></i> Thank you for your interest in Cloud Peak Silver Labradors!
+          </div>
+          <div style="background:#FEF3C7;border-left:4px solid #D97706;border-radius:4px;padding:0.85rem 1rem;font-size:14px;color:#78350F;line-height:1.6;margin-top:1rem;">
+            <i class="ti ti-file-text" aria-hidden="true"></i> <strong>Before you apply</strong> — please read our <a href="purchase-agreement.html" target="_blank" style="color:#92400E;font-weight:600;text-decoration:underline;">Purchase Agreement &amp; Health Guarantee</a>. You'll need to confirm you've read it at the bottom of this form.
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-card" id="application-form">
+
+          <div id="form-error" class="error-state" style="display:none;margin-bottom:1rem;"></div>
+
+          <!-- Name -->
+          <div class="form-section">
+            <div class="form-section-title">Name</div>
+            <div class="form-row cols-2">
+              <div class="form-field"><label>First name <span class="req">*</span></label><input type="text" id="first_name" required /></div>
+              <div class="form-field"><label>Last name <span class="req">*</span></label><input type="text" id="last_name" required /></div>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="form-section">
+            <div class="form-section-title">Address</div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Country</label>
+                <select id="country">
+                  <option>United States</option>
+                  <option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>American Samoa</option><option>Andorra</option><option>Angola</option><option>Anguilla</option><option>Antigua &amp; Barbuda</option><option>Argentina</option><option>Armenia</option><option>Aruba</option><option>Australia</option><option>Austria</option><option>Azerbaijan</option><option>Bahamas</option><option>Bahrain</option><option>Bangladesh</option><option>Barbados</option><option>Belarus</option><option>Belgium</option><option>Belize</option><option>Benin</option><option>Bermuda</option><option>Bhutan</option><option>Bolivia</option><option>Bosnia &amp; Herzegovina</option><option>Botswana</option><option>Brazil</option><option>British Virgin Islands</option><option>Brunei</option><option>Bulgaria</option><option>Burkina Faso</option><option>Burundi</option><option>Cambodia</option><option>Cameroon</option><option>Canada</option><option>Cape Verde</option><option>Cayman Islands</option><option>Central African Republic</option><option>Chad</option><option>Chile</option><option>China</option><option>Colombia</option><option>Comoros</option><option>Congo</option><option>Costa Rica</option><option>Croatia</option><option>Cuba</option><option>Cyprus</option><option>Czechia</option><option>Denmark</option><option>Djibouti</option><option>Dominica</option><option>Dominican Republic</option><option>Ecuador</option><option>Egypt</option><option>El Salvador</option><option>Estonia</option><option>Ethiopia</option><option>Fiji</option><option>Finland</option><option>France</option><option>Gabon</option><option>Gambia</option><option>Georgia</option><option>Germany</option><option>Ghana</option><option>Greece</option><option>Greenland</option><option>Grenada</option><option>Guatemala</option><option>Guinea</option><option>Guyana</option><option>Haiti</option><option>Honduras</option><option>Hong Kong SAR China</option><option>Hungary</option><option>Iceland</option><option>India</option><option>Indonesia</option><option>Iran</option><option>Iraq</option><option>Ireland</option><option>Israel</option><option>Italy</option><option>Jamaica</option><option>Japan</option><option>Jordan</option><option>Kazakhstan</option><option>Kenya</option><option>Kuwait</option><option>Kyrgyzstan</option><option>Laos</option><option>Latvia</option><option>Lebanon</option><option>Libya</option><option>Lithuania</option><option>Luxembourg</option><option>Madagascar</option><option>Malawi</option><option>Malaysia</option><option>Maldives</option><option>Mali</option><option>Malta</option><option>Mauritania</option><option>Mauritius</option><option>Mexico</option><option>Moldova</option><option>Monaco</option><option>Mongolia</option><option>Montenegro</option><option>Morocco</option><option>Mozambique</option><option>Myanmar (Burma)</option><option>Namibia</option><option>Nepal</option><option>Netherlands</option><option>New Zealand</option><option>Nicaragua</option><option>Niger</option><option>Nigeria</option><option>North Korea</option><option>North Macedonia</option><option>Norway</option><option>Oman</option><option>Pakistan</option><option>Panama</option><option>Papua New Guinea</option><option>Paraguay</option><option>Peru</option><option>Philippines</option><option>Poland</option><option>Portugal</option><option>Puerto Rico</option><option>Qatar</option><option>Romania</option><option>Russia</option><option>Rwanda</option><option>Saudi Arabia</option><option>Senegal</option><option>Serbia</option><option>Sierra Leone</option><option>Singapore</option><option>Slovakia</option><option>Slovenia</option><option>Somalia</option><option>South Africa</option><option>South Korea</option><option>South Sudan</option><option>Spain</option><option>Sri Lanka</option><option>Sudan</option><option>Sweden</option><option>Switzerland</option><option>Syria</option><option>Taiwan</option><option>Tanzania</option><option>Thailand</option><option>Trinidad &amp; Tobago</option><option>Tunisia</option><option>Türkiye</option><option>Uganda</option><option>Ukraine</option><option>United Arab Emirates</option><option>United Kingdom</option><option>Uruguay</option><option>Uzbekistan</option><option>Venezuela</option><option>Vietnam</option><option>Yemen</option><option>Zambia</option><option>Zimbabwe</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field"><label>Address line 1 <span class="req">*</span></label><input type="text" id="address_line1" required /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-field"><label>Address line 2</label><input type="text" id="address_line2" /></div>
+            </div>
+            <div class="form-row cols-3">
+              <div class="form-field"><label>City <span class="req">*</span></label><input type="text" id="city" required /></div>
+              <div class="form-field"><label>State <span class="req">*</span></label><input type="text" id="state" required /></div>
+              <div class="form-field"><label>ZIP code <span class="req">*</span></label><input type="text" id="zip" required /></div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-field"><label>Phone number <span class="req">*</span></label><input type="tel" id="phone" required /></div>
+              <div class="form-field"><label>Email <span class="req">*</span></label><input type="email" id="email" required /></div>
+            </div>
+          </div>
+
+          <!-- Purchase agreement -->
+          <div class="form-section">
+            <div class="form-section-title">Purchase agreement</div>
+            <div class="form-field" style="margin-bottom:1rem;">
+              <label>Do you have any questions or concerns regarding what you read in the Purchase Agreement and Health Guarantee? <span class="req">*</span></label>
+              <textarea id="purchase_agreement_questions" rows="3"></textarea>
+            </div>
+            <div class="form-field">
+              <label style="font-weight:500;color:var(--black);">Agreement (Health and Purchase) <span class="req">*</span></label>
+              <label class="checkbox-option">
+                <input type="checkbox" id="agreed_to_terms" required />
+                I have completely read and agree to the <a href="purchase-agreement.html" target="_blank" style="color:var(--teal);">Purchase Agreement</a> and the Health Guarantee.
+              </label>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="form-section">
+            <div class="form-section-title">Puppy preferences</div>
+            <div class="form-field" style="margin-bottom:1.25rem;">
+              <label style="font-weight:500;color:var(--black);">Gender preference <span class="req">*</span></label>
+              <p class="field-hint">Please only check which one you prefer. If it does not matter, please note that in the message at the end.</p>
+              <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="gender" value="male" /> Male</label>
+                <label class="radio-option"><input type="radio" name="gender" value="female" /> Female</label>
+              </div>
+            </div>
+            <div class="form-field" style="margin-bottom:1.25rem;">
+              <label style="font-weight:500;color:var(--black);">Color preference <span class="req">*</span></label>
+              <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="color" value="Silver" /> Silver</label>
+                <label class="radio-option"><input type="radio" name="color" value="Charcoal" /> Charcoal</label>
+                <label class="radio-option"><input type="radio" name="color" value="Black" /> Black</label>
+                <label class="radio-option"><input type="radio" name="color" value="Chocolate" /> Chocolate</label>
+              </div>
+            </div>
+            <div class="form-field">
+              <label style="font-weight:500;color:var(--black);">Are you looking for a dog with breeding quality or family pet quality? <span class="req">*</span></label>
+              <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="registration" value="Full Registration (Breeding Rights)" /> Full registration (breeding rights)</label>
+                <label class="radio-option"><input type="radio" name="registration" value="Limited Registration" /> Limited registration (great family pet, no breeding rights, intention to spay/neuter)</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Home & lifestyle -->
+          <div class="form-section">
+            <div class="form-section-title">Your home &amp; lifestyle</div>
+            <div class="form-field" style="margin-bottom:1rem;"><label>Do you have a fence? If not, what is your plan to keep your pup from wandering too far? <span class="req">*</span></label><textarea id="has_fence" rows="3" required></textarea></div>
+            <div class="form-field" style="margin-bottom:1rem;"><label>Do you prefer your pup to live indoors or outdoors? <span class="req">*</span></label><textarea id="indoor_outdoor" rows="2" required></textarea></div>
+            <div class="form-field" style="margin-bottom:1rem;"><label>Do you have a vet that you have worked with in the past? <span class="req">*</span></label><textarea id="vet_info" rows="2" required></textarea></div>
+            <div class="form-field"><label>Please tell us a bit about yourself and your home situation. Is this a single person home? Is there a family? Other pets? <span class="req">*</span></label><textarea id="home_situation" rows="4" required></textarea></div>
+          </div>
+
+          <!-- More -->
+          <div class="form-section">
+            <div class="form-section-title">A little more</div>
+            <div class="form-field" style="margin-bottom:1rem;"><label>Please let us know how you came across our site? <span class="req">*</span></label><textarea id="how_found" rows="2" required></textarea></div>
+            <div class="form-field" style="margin-bottom:1rem;">
+              <label>Do you have something specific you want to train your pup for? <span class="req">*</span></label>
+              <p class="field-hint">Family pet is an acceptable answer.</p>
+              <textarea id="training_goals" rows="2" required></textarea>
+            </div>
+            <div class="form-field"><label>Do you have any other questions or concerns?</label><textarea id="other_questions" rows="3"></textarea></div>
+          </div>
+
+          <button type="button" class="submit-btn" id="submit-btn" onclick="submitApplication()">Send application</button>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<script src="js/supabase.js"></script>
+<script>
+function val(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function radio(name) { return document.querySelector(`input[name="${name}"]:checked`)?.value || ''; }
+
+async function submitApplication() {
+  const btn = document.getElementById('submit-btn');
+  const errorEl = document.getElementById('form-error');
+  errorEl.style.display = 'none';
+
+  // Basic validation
+  const required = ['first_name','last_name','address_line1','city','state','zip','phone','email','has_fence','indoor_outdoor','vet_info','home_situation','how_found','training_goals'];
+  const missing = required.filter(id => !val(id));
+  if (missing.length) {
+    errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Please fill in all required fields.';
+    errorEl.style.display = 'block';
+    errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (!document.getElementById('agreed_to_terms').checked) {
+    errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Please agree to the Purchase Agreement and Health Guarantee.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    await db.insert('applications', {
+      first_name: val('first_name'),
+      last_name: val('last_name'),
+      address_line1: val('address_line1'),
+      address_line2: val('address_line2'),
+      city: val('city'),
+      state: val('state'),
+      zip: val('zip'),
+      country: val('country'),
+      phone: val('phone'),
+      email: val('email'),
+      gender_preference: radio('gender'),
+      color_preference: radio('color'),
+      registration_type: radio('registration'),
+      has_fence: val('has_fence'),
+      indoor_outdoor: val('indoor_outdoor'),
+      vet_info: val('vet_info'),
+      home_situation: val('home_situation'),
+      how_found: val('how_found'),
+      training_goals: val('training_goals'),
+      purchase_agreement_questions: val('purchase_agreement_questions'),
+      other_questions: val('other_questions'),
+      agreed_to_terms: true,
+      status: 'new'
+    });
+
+    // Notify admins by email (best effort — don't block success if it fails)
+    try {
+      await fetch('https://bvnurkvvhlmdapvhvcje.supabase.co/functions/v1/notify-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bnVya3Z2aGxtZGFwdmh2Y2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDQ3MDgsImV4cCI6MjA5MzY4MDcwOH0.ddHJhA-pktWJdkMqsUpgr_N11xG0z5yxm1XWqKZrT9Y`
+        },
+        body: JSON.stringify({
+          first_name: val('first_name'), last_name: val('last_name'),
+          email: val('email'), phone: val('phone'),
+          address_line1: val('address_line1'), city: val('city'),
+          state: val('state'), zip: val('zip'), country: val('country'),
+          gender_preference: radio('gender'), color_preference: radio('color'),
+          registration_type: radio('registration'),
+          has_fence: val('has_fence'), indoor_outdoor: val('indoor_outdoor'),
+          vet_info: val('vet_info'), home_situation: val('home_situation'),
+          how_found: val('how_found'), training_goals: val('training_goals'),
+          purchase_agreement_questions: val('purchase_agreement_questions'),
+          other_questions: val('other_questions')
+        })
+      });
+    } catch (_) { /* email failure shouldn't block the success screen */ }
+
+    document.getElementById('form-state').style.display = 'none';
+    const success = document.getElementById('success-state');
+    success.style.display = 'flex';
+    success.scrollIntoView({ behavior: 'smooth' });
+  } catch (e) {
+    errorEl.innerHTML = `<i class="ti ti-alert-circle"></i> Something went wrong: ${e.message}. Please try again or email us directly.`;
+    errorEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Send application';
+  }
+}
+</script>
+</body>
+</html>

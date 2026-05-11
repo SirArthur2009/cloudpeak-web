@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Silver Sadie — daughter of Landry and Mia, continuing Mia's line at Cloud Peak Silver Labradors." />
+  <title>Silver Sadie — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="site-header"></div> 
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a><span>›</span><a href="dogs.html">Our dogs</a><span>›</span>Silver Sadie
+  </div>
+</nav>
+
+<section class="profile-hero">
+  <div class="container">
+    <div class="profile-hero-inner">
+      <div class="profile-img-box" id="hero-img"><i class="ti ti-paw" aria-hidden="true"></i></div>
+      <div>
+        <h1>Silver Sadie</h1>
+        <div class="profile-registered">Daughter of Landry &amp; Mia</div>
+        <div class="badge-row">
+          <span class="profile-badge-new">New addition</span>
+          <span class="profile-badge">Silver Labrador</span>
+          <span class="profile-badge">Female</span>
+          <span class="profile-badge">Outgoing &amp; sweet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="profile-body">
+      <div class="profile-about">
+        <h2>About Sadie</h2>
+        <p>Silver Sadie is one of our newest and most exciting additions to the family! She is the daughter of Landry and Mia, carrying on Mia's wonderful heritage now that Mia has been retired. If you have ever wanted one of Mia's pups, Sadie is your answer.</p>
+        <p>Sadie is an outgoing, sweet girl who settled happily into her home with one of our family members. She is a joy to be around, and her pups will be a wonderful fit for any loving home.</p>
+      </div>
+      <div class="profile-creds">
+        <h2>Lineage &amp; breeding</h2>
+        <ul class="cred-list">
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Daughter of Landry &amp; Mia</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Continues Mia's heritage</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Bred with Ozzie</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Outgoing temperament</li>
+          <li><i class="ti ti-circle-check" aria-hidden="true"></i> Family-raised &amp; well-socialized</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;">
+      <div class="lineage-box">
+        <p><strong>Continuing Mia's line:</strong> With Mia now retired, Sadie carries that same beloved heritage forward. As the daughter of two of our finest dogs, she represents the best of what Cloud Peak Silver Labradors has to offer — and we couldn't be more excited to see her pups.</p>
+      </div>
+      <div class="litter-alert">
+        <i class="ti ti-calendar-event" aria-hidden="true"></i>
+        <p>Sadie's first litter with Ozzie is expected the first week of March 2026. <a href="waitlist.html">Join the waitlist</a> or <a href="available-litters.html">view available litters</a> to learn more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="profile-footer-note">
+  <p>Interested in a puppy from Sadie? <a href="available-litters.html">View available litters</a> or <a href="waitlist.html">join the waitlist</a>.</p>
+</div>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<script src="js/supabase.js"></script>
+<script>
+  async function loadDogData() {
+    try {
+      const dogs = await db.select('dogs', 'name=ilike.*sadie*&select=*');
+      const dog = dogs?.[0];
+      if (dog?.photo_url) {
+        document.getElementById('hero-img').innerHTML = `<img src="${dog.photo_url}" alt="Sadie" style="width:100%;height:100%;object-fit:cover;" />`;
+      }
+    } catch (_) {}
+  }
+  loadDogData();
+</script>
+</body>
+</html>

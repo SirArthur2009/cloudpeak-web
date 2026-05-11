@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cloud Peak Molly — Silver Labrador at Cloud Peak Silver Labradors." />
+  <title>Molly — Cloud Peak Silver Labradors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a><span>›</span><a href="dogs.html">Our dogs</a><span>›</span>Molly
+  </div>
+</nav>
+
+<section class="profile-hero">
+  <div class="container">
+    <div class="profile-hero-inner">
+      <div class="profile-img-box" id="hero-img"><i class="ti ti-paw" aria-hidden="true"></i></div>
+      <div>
+        <h1>Molly</h1>
+        <div class="profile-registered">Cloud Peak Molly</div>
+        <div class="badge-row">
+          <span class="profile-badge">Silver Labrador</span>
+          <span class="profile-badge">Female</span>
+          <span class="profile-badge">Family companion</span>
+          <span class="profile-badge">Outdoors lover</span>
+        </div>
+        <div class="ext-links">
+          <a href="http://embk.me/molly4728?utm_campaign=cns_ref_dog_pub_profile&utm_medium=other&utm_source=embark" target="_blank" rel="noopener" class="ext-link">
+            <i class="ti ti-dna" aria-hidden="true"></i> Molly's Embark profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="profile-body">
+      <div class="profile-about">
+        <h2>About Molly</h2>
+        <p>Molly is an amazing companion who brings joy and love to everyone she meets. Her playful personality and loyal nature make her a true treasure — whether she's lounging at home or out exploring the great outdoors, she is always fully present and devoted to her people.</p>
+        <p>Molly embodies everything you could want in a furry family member. Her tail seems to have a life of its own, and her warmth has a way of brightening any room she walks into. She enriches the lives of everyone around her, and we are so proud to have her as part of our family.</p>
+      </div>
+      <div>
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:3px solid var(--teal-light);display:inline-block;">Personality</h2>
+        <div class="trait-grid">
+          <div class="trait-card"><i class="ti ti-heart" aria-hidden="true"></i><span>Loyal &amp; loving</span></div>
+          <div class="trait-card"><i class="ti ti-ball-football" aria-hidden="true"></i><span>Playful nature</span></div>
+          <div class="trait-card"><i class="ti ti-tree" aria-hidden="true"></i><span>Loves the outdoors</span></div>
+          <div class="trait-card"><i class="ti ti-home" aria-hidden="true"></i><span>Great at home</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="profile-footer-note">
+  <p>Interested in a puppy from Molly? <a href="available-litters.html">View available litters</a> or <a href="waitlist.html">join the waitlist</a>.</p>
+</div>
+
+<section class="newsletter section-sm"><div class="container"><h2>Sign up to receive news and updates</h2><form class="newsletter-row" id="newsletter-form" novalidate><input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" /><button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button></form></div></section>
+<footer class="footer"><div class="container footer-inner"><p>© 2026 Cloud Peak Silver Labradors</p><div class="footer-links"><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a><a href="purchase-agreement.html">Purchase agreement</a></div></div></footer>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<script src="js/supabase.js"></script>
+<script>
+  async function loadDogData() {
+    try {
+      const dogs = await db.select('dogs', 'name=ilike.*molly*&select=*');
+      const dog = dogs?.[0];
+      if (dog?.photo_url) {
+        document.getElementById('hero-img').innerHTML = `<img src="${dog.photo_url}" alt="Molly" style="width:100%;height:100%;object-fit:cover;" />`;
+      }
+    } catch (_) {}
+  }
+  loadDogData();
+</script>
+</body>
+</html>
