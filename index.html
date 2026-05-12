@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Cloud Peak Silver Labradors — quality silver and charcoal Labrador puppies raised with love in Colorado." />
+  <meta name="description" content="Cloud Peak Silver Labradors — quality silver and charcoal Labrador puppies raised with love in Wyoming." />
   <title>Cloud Peak Silver Labradors</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,8 +17,8 @@
 <!-- ── Hero ── -->
 <section class="hero">
   <div class="container">
-    <h1>Healthy, beautiful silver &amp; charcoal Labradors</h1>
-    <p>Raised with love in Colorado. Each puppy is well-socialized and ready to be your family's perfect companion.</p>
+    <h1>Cloud Peak Silver Labradors</h1>
+    <p>Black, Chocolate, Silver & Charcoal Labradors raised with love in Wyoming. Each puppy is well-socialized and ready to be your family's perfect companion.</p>
     <div class="hero-btns">
       <a href="available-litters.html" class="btn btn-primary">View available litters</a>
       <a href="waitlist.html" class="btn btn-secondary">Join the waitlist</a>
@@ -42,7 +42,7 @@
       <span class="stat-label">Puppies available now</span>
     </div>
     <div class="stat">
-      <span class="stat-num">Colorado</span>
+      <span class="stat-num">Wyoming</span>
       <span class="stat-label">Based in the west</span>
     </div>
   </div>
@@ -119,8 +119,8 @@
         <br>
         <a href="therapy.html" class="btn btn-outline" style="border-color:var(--teal);color:var(--teal);">Learn about our program</a>
       </div>
-      <div class="highlight-img">
-        <i class="ti ti-heart" aria-hidden="true"></i>
+      <div class="highlight-img" style="background:transparent;">
+        <img src="assets/cute-pup-pic.jpg" alt="Cute puppy" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);" />
       </div>
     </div>
   </div>
@@ -195,7 +195,11 @@
 </footer>
 
 <!-- ── Scam awareness popup ── -->
-<div id="scam-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;padding:1rem;">
+<style>
+  #scam-popup { display:none; }
+  #scam-popup.visible { display:flex; }
+</style>
+<div id="scam-popup" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;padding:1rem;">
   <div style="background:#fff;border-radius:var(--radius-lg);max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <div style="background:var(--teal);padding:1.5rem 1.5rem 1rem;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">
@@ -383,14 +387,21 @@
 
   // Show scam popup on first visit
   function closeScamPopup() {
-    document.getElementById('scam-popup').style.display = 'none';
-    localStorage.setItem('cpsl_popup_seen', '1');
+    document.getElementById('scam-popup').classList.remove('visible');
+    try { localStorage.setItem('cpsl_popup_seen', '1'); } catch(_) {}
   }
   window.closeScamPopup = closeScamPopup;
-  if (!localStorage.getItem('cpsl_popup_seen')) {
+
+  // Use sessionStorage as fallback if localStorage blocked
+  function hasSeenPopup() {
+    try { return !!localStorage.getItem('cpsl_popup_seen'); } catch(_) {}
+    try { return !!sessionStorage.getItem('cpsl_popup_seen'); } catch(_) {}
+    return false;
+  }
+
+  if (!hasSeenPopup()) {
     setTimeout(() => {
-      const popup = document.getElementById('scam-popup');
-      popup.style.display = 'flex';
+      document.getElementById('scam-popup').classList.add('visible');
     }, 800);
   }
 </script>
