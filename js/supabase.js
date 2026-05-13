@@ -15,9 +15,22 @@ async function loadHeader() {
     if (!res.ok) return;
     const html = await res.text();
     placeholder.outerHTML = html;
-    // Re-init nav after injection
     initMobileNav();
     setActiveNav();
+  } catch (_) {}
+}
+
+// ── Load shared footer ──
+async function loadFooter() {
+  const placeholder = document.getElementById('site-footer');
+  if (!placeholder) return;
+  try {
+    const res = await fetch('footer.html');
+    if (!res.ok) return;
+    const html = await res.text();
+    placeholder.outerHTML = html;
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) newsletterForm.addEventListener('submit', handleNewsletterSignup);
   } catch (_) {}
 }
 
@@ -101,12 +114,17 @@ function initMobileNav() {
   const mobileNav = document.querySelector('.nav-mobile');
   if (!hamburger || !mobileNav) return;
   hamburger.addEventListener('click', () => {
-    mobileNav.classList.toggle('open');
-    const spans = hamburger.querySelectorAll('span');
-    const isOpen = mobileNav.classList.contains('open');
-    if (spans[0]) spans[0].style.transform = isOpen ? 'rotate(45deg) translate(5px, 5px)' : '';
-    if (spans[1]) spans[1].style.opacity = isOpen ? '0' : '1';
-    if (spans[2]) spans[2].style.transform = isOpen ? 'rotate(-45deg) translate(5px, -5px)' : '';
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+  // Close menu when a link is clicked
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
   });
 }
 
@@ -149,8 +167,7 @@ function setActiveNav() {
 // ── Init on DOM ready ──
 document.addEventListener('DOMContentLoaded', () => {
   loadHeader();
+  loadFooter();
   initMobileNav();
   setActiveNav();
-  const newsletterForm = document.getElementById('newsletter-form');
-  if (newsletterForm) newsletterForm.addEventListener('submit', handleNewsletterSignup);
 });
