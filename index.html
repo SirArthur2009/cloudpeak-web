@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 </head>
 <body>
 
@@ -172,27 +175,7 @@
 </section>
 
 <!-- ── Newsletter ── -->
-<section class="newsletter section-sm">
-  <div class="container">
-    <h2>Sign up to receive news and updates</h2>
-    <form class="newsletter-row" id="newsletter-form" novalidate>
-      <input type="email" id="newsletter-email" placeholder="Email Address" required aria-label="Email address" />
-      <button type="submit" class="newsletter-btn" id="newsletter-btn">Subscribe</button>
-    </form>
-  </div>
-</section>
-
-<!-- ── Footer ── -->
-<footer class="footer">
-  <div class="container footer-inner">
-    <p>© 2026 Cloud Peak Silver Labradors · Buffalo, Wyoming</p>
-    <div class="footer-links">
-      <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
-      <a href="mailto:cloudpeaksilverlabs@yahoo.com">cloudpeaksilverlabs@yahoo.com</a>
-      <a href="purchase-agreement.html">Purchase agreement</a>
-    </div>
-  </div>
-</footer>
+<div id="site-footer"></div>
 
 <!-- ── Scam awareness popup ── -->
 <style>
@@ -270,15 +253,17 @@
       grid.innerHTML = dogs.map(d => {
         const slug = Object.keys(slugs).find(k => d.name.toLowerCase().includes(k));
         const href = slug ? slugs[slug] : 'dogs.html';
+        const name = escapeHtml(d.name);
+        const sub = escapeHtml(d.notes ? d.notes.split('.')[0] : 'Labrador');
         return `
           <a href="${href}" class="card" style="text-decoration:none;">
             ${d.photo_url
-              ? `<img class="card-img" src="${d.photo_url}" alt="${d.name}" loading="lazy" />`
+              ? `<img class="card-img" src="${d.photo_url}" alt="${name}" loading="lazy" />`
               : `<div class="card-img-placeholder"><i class="ti ti-paw" aria-hidden="true"></i></div>`
             }
             <div class="card-body">
-              <div class="card-name">${d.name}</div>
-              <div class="card-sub">${d.notes ? d.notes.split('.')[0] : 'Labrador'}</div>
+              <div class="card-name">${name}</div>
+              <div class="card-sub">${sub}</div>
             </div>
           </a>`;
       }).join('');
@@ -313,16 +298,18 @@
         const lp = (puppies || []).filter(p => String(p.litter_id) === String(l.id));
         const avail = lp.filter(p => p.status === 'available').length;
         const status = l.status || getLitterStatus(lp);
+        const lName = escapeHtml(l.name);
+        const lColors = l.colors ? escapeHtml(l.colors) : '';
 
         if (status === 'upcoming') {
           return `
             <div class="litter-card">
               <div class="litter-header">
                 <div>
-                  <h2>${l.name}</h2>
+                  <h2>${lName}</h2>
                   <div class="litter-meta">
                     <span><i class="ti ti-calendar" aria-hidden="true"></i> Expected ${l.expected_date ? new Date(l.expected_date).toLocaleDateString() : 'soon'}</span>
-                    ${l.colors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${l.colors}</span>` : ''}
+                    ${lColors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${lColors}</span>` : ''}
                   </div>
                 </div>
                 <span class="badge badge-upcoming">Upcoming</span>
@@ -344,25 +331,29 @@
           <div class="litter-card">
             <div class="litter-header">
               <div>
-                <h2>${l.name}</h2>
+                <h2>${lName}</h2>
                 <div class="litter-meta">
                   ${l.born_date ? `<span><i class="ti ti-calendar" aria-hidden="true"></i> Born ${new Date(l.born_date).toLocaleDateString()}</span>` : ''}
                   ${l.go_home_date ? `<span><i class="ti ti-home" aria-hidden="true"></i> Go home ${new Date(l.go_home_date).toLocaleDateString()}</span>` : ''}
-                  ${l.colors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${l.colors}</span>` : ''}
+                  ${lColors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${lColors}</span>` : ''}
                 </div>
               </div>
               <span class="badge badge-${badgeStatus}">${badgeLabels[badgeStatus]}</span>
             </div>
             <div class="litter-body">
               <div class="puppy-grid">
-                ${lp.map(p => `
-                  <div class="puppy-pill ${p.status}">
+                ${lp.map(p => {
+                  const pName = escapeHtml(p.name || ((p.color || '') + ' ' + (p.gender || '')));
+                  const pStatus = escapeHtml(p.status);
+                  return `
+                  <div class="puppy-pill ${pStatus}">
                     <span class="collar-dot" style="background:${collarHex(p.color || p.collar_color || '')}"></span>
                     <div class="puppy-pill-info">
-                      <div class="puppy-pill-name">${p.name || (p.color + ' ' + (p.gender || ''))}</div>
-                      <div class="puppy-pill-status ${p.status === 'available' ? 'avail' : p.status}">${p.status}</div>
+                      <div class="puppy-pill-name">${pName}</div>
+                      <div class="puppy-pill-status ${p.status === 'available' ? 'avail' : pStatus}">${pStatus}</div>
                     </div>
-                  </div>`).join('')}
+                  </div>`;
+                }).join('')}
               </div>
               <div class="litter-footer">
                 <div class="avail-count">
