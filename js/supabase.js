@@ -6,6 +6,15 @@
 const SUPABASE_URL = 'https://bvnurkvvhlmdapvhvcje.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bnVya3Z2aGxtZGFwdmh2Y2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDQ3MDgsImV4cCI6MjA5MzY4MDcwOH0.ddHJhA-pktWJdkMqsUpgr_N11xG0z5yxm1XWqKZrT9Y';
 
+// ── HTML escape helper ──
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 // ── Load shared header ──
 async function loadHeader() {
   const placeholder = document.getElementById('site-header');
@@ -29,8 +38,8 @@ async function loadFooter() {
     if (!res.ok) return;
     const html = await res.text();
     placeholder.outerHTML = html;
-    const newsletterForm = document.getElementById('newsletter-form');
-    if (newsletterForm) newsletterForm.addEventListener('submit', handleNewsletterSignup);
+    const form = document.getElementById('newsletter-form');
+    if (form) form.addEventListener('submit', handleNewsletterSignup);
   } catch (_) {}
 }
 
@@ -114,17 +123,12 @@ function initMobileNav() {
   const mobileNav = document.querySelector('.nav-mobile');
   if (!hamburger || !mobileNav) return;
   hamburger.addEventListener('click', () => {
-    const isOpen = mobileNav.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen);
-  });
-  // Close menu when a link is clicked
-  mobileNav.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    });
+    mobileNav.classList.toggle('open');
+    const spans = hamburger.querySelectorAll('span');
+    const isOpen = mobileNav.classList.contains('open');
+    if (spans[0]) spans[0].style.transform = isOpen ? 'rotate(45deg) translate(5px, 5px)' : '';
+    if (spans[1]) spans[1].style.opacity = isOpen ? '0' : '1';
+    if (spans[2]) spans[2].style.transform = isOpen ? 'rotate(-45deg) translate(5px, -5px)' : '';
   });
 }
 

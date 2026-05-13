@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 </head>
 <body>
 
@@ -50,6 +53,7 @@
 </section>
 
 <div id="site-footer"></div>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
 <script src="js/supabase.js"></script>
 <script>
 async function loadLitters() {
@@ -87,17 +91,21 @@ async function loadLitters() {
       const reserved = lp.filter(p => p.status === 'reserved').length;
       const sold = lp.filter(p => p.status === 'sold').length;
       const status = l.status || getLitterStatus(lp);
+      const lName = escapeHtml(l.name);
+      const lSire = escapeHtml(l.sire || '—');
+      const lDam = escapeHtml(l.dam || '—');
+      const lColors = l.colors ? escapeHtml(l.colors) : '';
 
       if (status === 'upcoming') {
         return `
           <div class="litter-card">
             <div class="litter-header">
               <div class="litter-header-left">
-                <h2>${l.name}</h2>
+                <h2>${lName}</h2>
                 <div class="litter-meta">
-                  <span><i class="ti ti-user" aria-hidden="true"></i> ${l.sire || '—'} × ${l.dam || '—'}</span>
+                  <span><i class="ti ti-user" aria-hidden="true"></i> ${lSire} × ${lDam}</span>
                   ${l.expected_date ? `<span><i class="ti ti-calendar" aria-hidden="true"></i> Expected ${new Date(l.expected_date).toLocaleDateString()}</span>` : ''}
-                  ${l.colors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${l.colors}</span>` : ''}
+                  ${lColors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${lColors}</span>` : ''}
                 </div>
               </div>
               <span class="badge badge-upcoming">Upcoming</span>
@@ -119,12 +127,12 @@ async function loadLitters() {
         <div class="litter-card">
           <div class="litter-header">
             <div class="litter-header-left">
-              <h2>${l.name}</h2>
+              <h2>${lName}</h2>
               <div class="litter-meta">
-                <span><i class="ti ti-user" aria-hidden="true"></i> ${l.sire || '—'} × ${l.dam || '—'}</span>
+                <span><i class="ti ti-user" aria-hidden="true"></i> ${lSire} × ${lDam}</span>
                 ${l.born_date ? `<span><i class="ti ti-calendar" aria-hidden="true"></i> Born ${new Date(l.born_date).toLocaleDateString()}</span>` : ''}
                 ${l.go_home_date ? `<span><i class="ti ti-home" aria-hidden="true"></i> Go home ${new Date(l.go_home_date).toLocaleDateString()}</span>` : ''}
-                ${l.colors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${l.colors}</span>` : ''}
+                ${lColors ? `<span><i class="ti ti-paw" aria-hidden="true"></i> ${lColors}</span>` : ''}
               </div>
             </div>
             <span class="badge badge-${badgeStatus}">${badgeLabels[badgeStatus]}</span>
@@ -137,15 +145,21 @@ async function loadLitters() {
           <div class="litter-body">
             ${lp.length > 0 ? `
               <div class="puppy-grid">
-                ${lp.map(p => `
-                  <div class="puppy-pill ${p.status}">
-                    <span class="collar-dot" style="background:${collarHex(p.color || '')}"></span>
+                ${lp.map(p => {
+                  const pName = escapeHtml(p.name || ((p.color || '') + ' ' + (p.gender || '')));
+                  const pGender = escapeHtml(p.gender || '');
+                  const pColor = escapeHtml(p.color || '');
+                  const pStatus = escapeHtml(p.status);
+                  return `
+                  <div class="puppy-pill ${pStatus}">
+                    <span class="collar-dot" style="background:${collarHex(p.color || p.collar_color || '')}"></span>
                     <div class="puppy-pill-info">
-                      <div class="puppy-pill-name">${p.name || (p.color + ' ' + (p.gender || ''))}</div>
-                      <div class="puppy-pill-sub">${p.gender || ''} ${p.color || ''}</div>
-                      <div class="puppy-pill-status ${p.status === 'available' ? 'avail' : p.status}">${p.status}</div>
+                      <div class="puppy-pill-name">${pName}</div>
+                      <div class="puppy-pill-sub">${pGender} ${pColor}</div>
+                      <div class="puppy-pill-status ${p.status === 'available' ? 'avail' : pStatus}">${pStatus}</div>
                     </div>
-                  </div>`).join('')}
+                  </div>`;
+                }).join('')}
               </div>` : ''}
             <div class="litter-footer">
               <div class="avail-count">

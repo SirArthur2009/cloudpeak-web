@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <style>
     @media (max-width: 768px) {
       .apply-layout { grid-template-columns: 1fr !important; }
@@ -175,6 +178,7 @@
 </div>
 
 <div id="site-footer"></div>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
 <script src="js/supabase.js"></script>
 <script>
 function val(id) { return document.getElementById(id)?.value?.trim() || ''; }
@@ -190,6 +194,24 @@ async function submitApplication() {
   const missing = required.filter(id => !val(id));
   if (missing.length) {
     errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Please fill in all required fields.';
+    errorEl.style.display = 'block';
+    errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (!radio('gender')) {
+    errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Please select a gender preference.';
+    errorEl.style.display = 'block';
+    errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (!radio('color')) {
+    errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Please select a color preference.';
+    errorEl.style.display = 'block';
+    errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (!radio('registration')) {
+    errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Please select full or limited registration.';
     errorEl.style.display = 'block';
     errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -259,7 +281,7 @@ async function submitApplication() {
     success.style.display = 'flex';
     success.scrollIntoView({ behavior: 'smooth' });
   } catch (e) {
-    errorEl.innerHTML = `<i class="ti ti-alert-circle"></i> Something went wrong: ${e.message}. Please try again or email us directly.`;
+    errorEl.innerHTML = '<i class="ti ti-alert-circle"></i> Something went wrong. Please try again or email us directly.';
     errorEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'Send application';

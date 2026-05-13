@@ -361,6 +361,7 @@ p { line-height: 1.8; }
 /* ── Available litters ── */
 .litter-card { border-radius: var(--radius-lg); overflow: hidden; border: 0.5px solid var(--grey-mid); margin-bottom: 1.5rem; }
 .litter-header { padding: 1.25rem 1.5rem; background: #fafaf9; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; border-bottom: 0.5px solid var(--grey-mid); }
+.litter-header-left { flex: 1; min-width: 0; }
 .litter-header h2 { font-family: var(--font-sans); font-size: 18px; font-weight: 500; margin-bottom: 0.25rem; }
 .litter-meta { display: flex; gap: 1rem; flex-wrap: wrap; }
 .litter-meta span { font-size: 13px; color: var(--grey-text); display: flex; align-items: center; gap: 5px; }
@@ -428,7 +429,8 @@ p { line-height: 1.8; }
 
 /* ── Loading / error states ── */
 .loading-state { text-align: center; padding: 3rem; color: var(--grey-text); }
-.loading-state i { font-size: 32px; display: block; margin-bottom: 0.75rem; opacity: 0.4; }
+.loading-state i { font-size: 32px; display: block; margin-bottom: 0.75rem; opacity: 0.4; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .error-state { background: #FEE2E2; border: 0.5px solid #FCA5A5; border-radius: var(--radius-md); padding: 1rem 1.25rem; font-size: 14px; color: #991B1B; margin-bottom: 1.5rem; }
 
 /* ── Utility ── */
@@ -520,7 +522,7 @@ p { line-height: 1.8; }
   .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
   .highlight-inner { grid-template-columns: 1fr; }
-  .highlight-img { display: none; }
+  .highlight-img { aspect-ratio: 16/9; }
   .profile-hero-inner { grid-template-columns: 1fr; }
   .profile-body { grid-template-columns: 1fr; }
   .form-row.cols-2, .form-row.cols-3 { grid-template-columns: 1fr; }
