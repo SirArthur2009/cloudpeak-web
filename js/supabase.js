@@ -6,6 +6,15 @@
 const SUPABASE_URL = 'https://bvnurkvvhlmdapvhvcje.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bnVya3Z2aGxtZGFwdmh2Y2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDQ3MDgsImV4cCI6MjA5MzY4MDcwOH0.ddHJhA-pktWJdkMqsUpgr_N11xG0z5yxm1XWqKZrT9Y';
 
+// ── HTML escape helper ──
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 // ── Load shared header ──
 async function loadHeader() {
   const placeholder = document.getElementById('site-header');
@@ -15,9 +24,22 @@ async function loadHeader() {
     if (!res.ok) return;
     const html = await res.text();
     placeholder.outerHTML = html;
-    // Re-init nav after injection
     initMobileNav();
     setActiveNav();
+  } catch (_) {}
+}
+
+// ── Load shared footer ──
+async function loadFooter() {
+  const placeholder = document.getElementById('site-footer');
+  if (!placeholder) return;
+  try {
+    const res = await fetch('footer.html');
+    if (!res.ok) return;
+    const html = await res.text();
+    placeholder.outerHTML = html;
+    const form = document.getElementById('newsletter-form');
+    if (form) form.addEventListener('submit', handleNewsletterSignup);
   } catch (_) {}
 }
 
@@ -149,8 +171,7 @@ function setActiveNav() {
 // ── Init on DOM ready ──
 document.addEventListener('DOMContentLoaded', () => {
   loadHeader();
+  loadFooter();
   initMobileNav();
   setActiveNav();
-  const newsletterForm = document.getElementById('newsletter-form');
-  if (newsletterForm) newsletterForm.addEventListener('submit', handleNewsletterSignup);
 });
