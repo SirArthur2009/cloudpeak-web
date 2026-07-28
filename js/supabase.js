@@ -5,6 +5,9 @@
 
 const SUPABASE_URL = 'https://bvnurkvvhlmdapvhvcje.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bnVya3Z2aGxtZGFwdmh2Y2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDQ3MDgsImV4cCI6MjA5MzY4MDcwOH0.ddHJhA-pktWJdkMqsUpgr_N11xG0z5yxm1XWqKZrT9Y';
+const ANALYTICS_TABLE = 'analytics_events';
+let analyticsSessionId = null;
+let pageStartTime = null;
 
 // ── HTML escape helper ──
 function escapeHtml(str) {
@@ -13,6 +16,166 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+// ── Database-backed analytics helpers ──
+function getAnalyticsSessionId() {
+  if (analyticsSessionId) return analyticsSessionId;
+  const key = 'cloudpeak_analytics_session_id';
+  try {
+    analyticsSessionId = sessionStorage.getItem(key);
+    if (!analyticsSessionId) {
+      analyticsSessionId = (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+      sessionStorage.setItem(key, analyticsSessionId);
+    }
+  } catch (_) {
+    analyticsSessionId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+  return analyticsSessionId;
+}
+
+function getSessionStorageJson(key, fallback) {
+  try {
+    const value = sessionStorage.getItem(key);
+    if (!value) return fallback;
+    return JSON.parse(value);
+  } catch (_) {
+    return fallback;
+  }
+}
+
+function setSessionStorageJson(key, value) {
+  try {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  } catch (_) {}
+}
+
+function getSessionPath() {
+  return getSessionStorageJson('cloudpeak_analytics_path', []);
+}
+
+function setSessionPath(path) {
+  setSessionStorageJson('cloudpeak_analytics_path', path);
+}
+
+function getPageStartTime() {
+  if (pageStartTime) return pageStartTime;
+  try {
+    const stored = sessionStorage.getItem('cloudpeak_analytics_page_start');
+    pageStartTime = stored ? Number(stored) : Date.now();
+    sessionStorage.setItem('cloudpeak_analytics_page_start', String(pageStartTime));
+  } catch (_) {
+    pageStartTime = Date.now();
+  }
+  return pageStartTime;
+}
+
+function recordPagePath() {
+  const path = window.location.pathname + (window.location.search || '');
+  const sessionPath = getSessionPath();
+  const lastPath = sessionPath[sessionPath.length - 1];
+  if (lastPath !== path) {
+    sessionPath.push(path);
+    setSessionPath(sessionPath);
+  }
+  return sessionPath;
+}
+
+function trackAnalytics(eventName, properties = {}) {
+  void db.insert(ANALYTICS_TABLE, {
+    event_name: eventName,
+    page_path: window.location.pathname,
+    page_title: document.title,
+    referrer: document.referrer || null,
+    session_id: getAnalyticsSessionId(),
+    properties,
+  }).catch(() => {});
+}
+
+function trackAnalyticsBeacon(eventName, properties = {}) {
+  const payload = JSON.stringify({
+    event_name: eventName,
+    page_path: window.location.pathname,
+    page_title: document.title,
+    referrer: document.referrer || null,
+    session_id: getAnalyticsSessionId(),
+    properties,
+  });
+  const url = `${SUPABASE_URL}/rest/v1/${ANALYTICS_TABLE}`;
+  if (navigator.sendBeacon) {
+    const blob = new Blob([payload], { type: 'application/json' });
+    const ok = navigator.sendBeacon(url, blob);
+    if (ok) return;
+  }
+  void fetch(url, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal',
+    },
+    body: payload,
+    keepalive: true,
+  }).catch(() => {});
+}
+
+function getAnalyticsLabel(element) {
+  return (element.getAttribute('aria-label') || element.textContent || element.href || element.id || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 120);
+}
+
+function handleAnalyticsClick(event) {
+  const target = event.target.closest('a, button');
+  if (!target) return;
+
+  const isLink = target.tagName === 'A';
+  const href = isLink ? target.getAttribute('href') || '' : '';
+  const label = getAnalyticsLabel(target);
+  const isExternal = isLink && /^https?:\/\//i.test(href) && new URL(href, window.location.href).host !== window.location.host;
+  const isContact = isLink && /^(mailto:|tel:)/i.test(href);
+
+  if (isLink && !href) return;
+
+  trackAnalytics('site_click', {
+    link_text: label,
+    link_url: href || window.location.href,
+    link_type: isExternal ? 'external' : isContact ? 'contact' : isLink ? 'internal' : 'button',
+  });
+}
+
+function handleAnalyticsSubmit(event) {
+  const form = event.target;
+  const id = form.getAttribute('id') || '';
+  const action = form.getAttribute('action') || '';
+  const label = form.getAttribute('aria-label') || id || action || 'form';
+  trackAnalytics('site_form_submit', {
+    form_id: id || undefined,
+    form_action: action || undefined,
+    form_label: label,
+  });
+}
+
+function trackPageView() {
+  const sessionPath = recordPagePath();
+  trackAnalytics('page_view', {
+    path: window.location.pathname,
+    search: window.location.search || '',
+    title: document.title,
+    session_path: sessionPath,
+    session_page_count: sessionPath.length,
+  });
+}
+
+function trackPageDuration() {
+  const durationMs = Math.max(0, Date.now() - getPageStartTime());
+  trackAnalyticsBeacon('page_exit', {
+    duration_ms: durationMs,
+    path: window.location.pathname,
+    search: window.location.search || '',
+  });
 }
 
 // ── Load shared header ──
@@ -144,6 +307,7 @@ async function handleNewsletterSignup(e) {
     await db.insert('newsletter_signups', { email: input.value.trim() });
     input.value = '';
     btn.textContent = 'Subscribed!';
+    trackAnalytics('newsletter_signup', { method: 'email' });
     showToast('You\'re on the list!');
     setTimeout(() => { btn.textContent = 'Subscribe'; btn.disabled = false; }, 3000);
   } catch (err) {
@@ -174,4 +338,10 @@ document.addEventListener('DOMContentLoaded', () => {
   loadFooter();
   initMobileNav();
   setActiveNav();
+  getPageStartTime();
+  trackPageView();
+  document.addEventListener('click', handleAnalyticsClick, true);
+  document.addEventListener('submit', handleAnalyticsSubmit, true);
 });
+
+window.addEventListener('pagehide', trackPageDuration);
