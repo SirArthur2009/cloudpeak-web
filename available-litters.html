@@ -64,6 +64,15 @@ async function loadLitters() {
       db.select('puppies', 'select=id,litter_id,status,color,gender,name,collar_color,photo_url')
     ]);
 
+    const totalAvailablePuppies = (puppies || []).filter(p => p.status === 'available').length;
+    const noAvailablePuppiesCta = `
+      <div class="no-puppies-cta" role="status" aria-live="polite">
+        <i class="ti ti-photo-heart" aria-hidden="true"></i>
+        <h2>No puppies are currently available</h2>
+        <p>See recent litters and growth photos in our puppy gallery.</p>
+        <a href="gallery.html" class="btn btn-dark no-puppies-cta-btn">View puppy gallery</a>
+      </div>`;
+
     // Sort: upcoming first, then available/limited by newest date, then placed last
     const statusOrder = { upcoming: 0, available: 1, limited: 2, placed: 3 };
     const litters = (littersRaw || []).sort((a, b) => {
@@ -80,12 +89,15 @@ async function loadLitters() {
         <div style="text-align:center;padding:4rem 0;">
           <i class="ti ti-paw" style="font-size:48px;color:var(--grey-mid);display:block;margin-bottom:1rem;" aria-hidden="true"></i>
           <p style="color:var(--grey-text);font-size:15px;margin-bottom:1.5rem;">No litters currently listed. Check back soon or join the waitlist!</p>
-          <a href="waitlist.html" class="btn btn-outline">Join the waitlist</a>
+          <div class="hero-btns">
+            <a href="gallery.html" class="btn btn-dark">View puppy gallery</a>
+            <a href="waitlist.html" class="btn btn-outline">Join the waitlist</a>
+          </div>
         </div>`;
       return;
     }
 
-    container.innerHTML = litters.map(l => {
+    const litterCards = litters.map(l => {
       const lp = (puppies || []).filter(p => String(p.litter_id) === String(l.id));
       const avail = lp.filter(p => p.status === 'available').length;
       const reserved = lp.filter(p => p.status === 'reserved').length;
@@ -176,7 +188,10 @@ async function loadLitters() {
             </div>
           </div>
         </div>`;
+
     }).join('');
+
+    container.innerHTML = `${totalAvailablePuppies === 0 ? noAvailablePuppiesCta : ''}${litterCards}`;
   } catch (e) {
     container.innerHTML = `<div class="error-state"><i class="ti ti-alert-circle"></i> Couldn't load litters right now. Please try again shortly.</div>`;
   }
