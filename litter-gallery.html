@@ -133,7 +133,7 @@ async function loadGallery() {
     // Map puppy_id → first photo
     const photoMap = {};
     (photos || []).forEach(ph => {
-      if (!photoMap[ph.puppy_id]) photoMap[ph.puppy_id] = ph.photo_url;
+      if (!photoMap[ph.puppy_id] && !/\.(mp4|webm|mov)(?:\?|$)/i.test(ph.photo_url)) photoMap[ph.puppy_id] = ph.photo_url;
     });
 
     container.innerHTML = `

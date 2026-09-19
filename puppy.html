@@ -21,18 +21,21 @@
       margin: 0 auto;
     }
     .puppy-photo-item {
+      position: relative;
       border-radius: var(--radius-lg);
       overflow: hidden;
       border: 0.5px solid var(--grey-mid);
       cursor: pointer;
     }
-    .puppy-photo-item img {
+    .puppy-photo-item img, .puppy-photo-item video {
       width: 100%;
+      aspect-ratio: 1;
       display: block;
       object-fit: cover;
       transition: transform 0.2s;
     }
     .puppy-photo-item:hover img { transform: scale(1.01); }
+    .video-play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; background: rgba(0,0,0,.65); border-radius: 50%; width: 48px; height: 48px; display: grid; place-items: center; }
     .puppy-photo-caption {
       padding: 8px 12px;
       font-size: 13px;
@@ -45,10 +48,12 @@
       z-index: 200; display: flex; align-items: center; justify-content: center;
       padding: 1rem; cursor: pointer;
     }
-    .lightbox img {
+    .lightbox img, .lightbox video {
       max-width: 92vw; max-height: 92vh; object-fit: contain;
       border-radius: var(--radius-md);
     }
+    .lightbox-media { cursor: default; }
+    #hero-img video { width: 100%; height: 100%; object-fit: cover; }
     .lightbox-close {
       position: absolute; top: 1rem; right: 1rem;
       background: rgba(255,255,255,0.15); border: none; color: white;
@@ -125,6 +130,10 @@ const params = new URLSearchParams(window.location.search);
 const puppyId = params.get('puppy');
 let allPhotos = [];
 let lightboxIndex = 0;
+const isVideo = photo => /\.(mp4|webm|mov)(?:\?|$)/i.test(photo.photo_url);
+const mediaHtml = (photo, alt, lightbox = false) => isVideo(photo)
+  ? `<video src="${escapeHtml(photo.photo_url)}" ${lightbox ? 'controls autoplay' : 'controls'} playsinline preload="metadata" aria-label="${escapeHtml(alt)}"></video>`
+  : `<img src="${escapeHtml(photo.photo_url)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
 
 function openLightbox(index) {
   lightboxIndex = index;
@@ -135,7 +144,7 @@ function openLightbox(index) {
   lb.innerHTML = `
     <button class="lightbox-close" aria-label="Close"><i class="ti ti-x"></i></button>
     ${allPhotos.length > 1 ? `<button class="lightbox-prev" aria-label="Previous"><i class="ti ti-chevron-left"></i></button>` : ''}
-    <img src="${photo.photo_url}" alt="${photo.caption || 'Puppy photo'}" />
+    <div class="lightbox-media">${mediaHtml(photo, photo.caption || 'Puppy media', true)}</div>
     ${allPhotos.length > 1 ? `<button class="lightbox-next" aria-label="Next"><i class="ti ti-chevron-right"></i></button>` : ''}
   `;
   lb.addEventListener('click', e => { if (e.target === lb) lb.remove(); });
@@ -148,7 +157,7 @@ function openLightbox(index) {
 function changeLightbox(dir) {
   lightboxIndex = (lightboxIndex + dir + allPhotos.length) % allPhotos.length;
   const lb = document.getElementById('lightbox');
-  if (lb) lb.querySelector('img').src = allPhotos[lightboxIndex].photo_url;
+  if (lb) lb.querySelector('.lightbox-media').innerHTML = mediaHtml(allPhotos[lightboxIndex], allPhotos[lightboxIndex].caption || 'Puppy media', true);
 }
 
 document.addEventListener('keydown', e => {
@@ -194,9 +203,12 @@ async function loadPuppy() {
     document.getElementById('puppy-litter-name').textContent = litter?.name || '';
 
     // Hero image — first photo
-    if (allPhotos.length > 0) {
+    const heroPhoto = allPhotos.find(photo => !isVideo(photo));
+    if (heroPhoto) {
       document.getElementById('hero-img').innerHTML =
-        `<img src="${allPhotos[0].photo_url}" alt="${safeDisplayName}" style="width:100%;height:100%;object-fit:cover;" />`;
+        `<img src="${escapeHtml(heroPhoto.photo_url)}" alt="${safeDisplayName}" style="width:100%;height:100%;object-fit:cover;" />`;
+    } else if (allPhotos.length > 0) {
+      document.getElementById('hero-img').innerHTML = mediaHtml(allPhotos[0], displayName + ' video');
     }
 
     // Badges
@@ -241,7 +253,9 @@ async function loadPuppy() {
 
     strip.innerHTML = allPhotos.map((photo, i) => `
       <div class="puppy-photo-item" onclick="openLightbox(${i})">
-        <img src="${photo.photo_url}" alt="${escapeHtml(photo.caption || displayName + ' photo ' + (i+1))}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+        ${isVideo(photo)
+          ? `<video src="${escapeHtml(photo.photo_url)}" muted playsinline preload="metadata" aria-label="${escapeHtml(photo.caption || displayName + ' video ' + (i+1))}"></video><span class="video-play-icon" aria-hidden="true">▶</span>`
+          : `<img src="${escapeHtml(photo.photo_url)}" alt="${escapeHtml(photo.caption || displayName + ' photo ' + (i+1))}" loading="${i === 0 ? 'eager' : 'lazy'}" />`}
         ${photo.caption ? `<div class="puppy-photo-caption">${escapeHtml(photo.caption)}</div>` : ''}
       </div>`).join('');
 
