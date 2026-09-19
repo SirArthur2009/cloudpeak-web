@@ -250,10 +250,11 @@ function getLitterStatus(puppies) {
 // ── Collar color to hex ──
 function collarHex(color) {
   const map = {
-    yellow: '#f5c842', blue: '#3b82f6', pink: '#ec4899',
+    yellow: '#f5c842', blue: '#3b82f6', 'dark blue': '#1e3a8a', pink: '#ec4899',
     purple: '#a855f7', red: '#ef4444', green: '#22c55e',
+    'light green': '#86efac', 'dark green': '#166534',
     orange: '#f97316', white: '#e5e7eb', black: '#374151',
-    teal: '#14b8a6', brown: '#92400e', silver: '#9ca3af',
+    teal: '#14b8a6', brown: '#92400e', grey: '#9ca3af', silver: '#9ca3af',
     lime: '#84cc16', cyan: '#06b6d4'
   };
   return map[(color || '').toLowerCase()] || '#aaa';
