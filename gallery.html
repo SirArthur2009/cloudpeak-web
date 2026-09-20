@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://bvnurkvvhlmdapvhvcje.supabase.co" crossorigin />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Photo galleries of our Labrador litters at Cloud Peak Silver Labradors." />
@@ -78,7 +79,7 @@ async function loadGalleries() {
           return `
             <a href="litter-gallery.html?litter=${l.id}" class="card" style="text-decoration:none;display:block;">
               ${thumb
-                ? `<img src="${thumb}" alt="${lName}" class="card-img" loading="lazy" />`
+                ? `<img decoding="async" src="${thumb}" alt="${lName}" class="card-img" loading="lazy" />`
                 : `<div class="card-img-placeholder" style="aspect-ratio:16/9;"><i class="ti ti-photo" aria-hidden="true"></i></div>`}
               <div class="card-body">
                 <div class="card-name">${lName}</div>

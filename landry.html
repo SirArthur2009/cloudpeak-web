@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://bvnurkvvhlmdapvhvcje.supabase.co" crossorigin />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Stonewick's Master Landry — Silver Labrador stud at Cloud Peak Silver Labradors." />
@@ -92,7 +93,7 @@
       if (!dog) return;
       if (dog.photo_url) {
         const box = document.getElementById('hero-img');
-        box.innerHTML = `<img src="${dog.photo_url}" alt="Landry" style="width:100%;height:100%;object-fit:cover;" />`;
+        box.innerHTML = `<img decoding="async" fetchpriority="high" src="${dog.photo_url}" alt="Landry" style="width:100%;height:100%;object-fit:cover;" />`;
       }
       if (dog.embark_url) {
         const el = document.getElementById('embark-link');

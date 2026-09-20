@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://bvnurkvvhlmdapvhvcje.supabase.co" crossorigin />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Puppy profile — Cloud Peak Silver Labradors." />
@@ -133,7 +134,7 @@ let lightboxIndex = 0;
 const isVideo = photo => /\.(mp4|webm|mov)(?:\?|$)/i.test(photo.photo_url);
 const mediaHtml = (photo, alt, lightbox = false) => isVideo(photo)
   ? `<video src="${escapeHtml(photo.photo_url)}" ${lightbox ? 'controls autoplay' : 'controls'} playsinline preload="metadata" aria-label="${escapeHtml(alt)}"></video>`
-  : `<img src="${escapeHtml(photo.photo_url)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+  : `<img decoding="async" src="${escapeHtml(photo.photo_url)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
 
 function openLightbox(index) {
   lightboxIndex = index;
@@ -206,7 +207,7 @@ async function loadPuppy() {
     const heroPhoto = allPhotos.find(photo => !isVideo(photo));
     if (heroPhoto) {
       document.getElementById('hero-img').innerHTML =
-        `<img src="${escapeHtml(heroPhoto.photo_url)}" alt="${safeDisplayName}" style="width:100%;height:100%;object-fit:cover;" />`;
+        `<img decoding="async" fetchpriority="high" src="${escapeHtml(heroPhoto.photo_url)}" alt="${safeDisplayName}" style="width:100%;height:100%;object-fit:cover;" />`;
     } else if (allPhotos.length > 0) {
       document.getElementById('hero-img').innerHTML = mediaHtml(allPhotos[0], displayName + ' video');
     }
@@ -255,7 +256,7 @@ async function loadPuppy() {
       <div class="puppy-photo-item" onclick="openLightbox(${i})">
         ${isVideo(photo)
           ? `<video src="${escapeHtml(photo.photo_url)}" muted playsinline preload="metadata" aria-label="${escapeHtml(photo.caption || displayName + ' video ' + (i+1))}"></video><span class="video-play-icon" aria-hidden="true">▶</span>`
-          : `<img src="${escapeHtml(photo.photo_url)}" alt="${escapeHtml(photo.caption || displayName + ' photo ' + (i+1))}" loading="${i === 0 ? 'eager' : 'lazy'}" />`}
+          : `<img decoding="async" src="${escapeHtml(photo.photo_url)}" alt="${escapeHtml(photo.caption || displayName + ' photo ' + (i+1))}" loading="${i === 0 ? 'eager' : 'lazy'}" />`}
         ${photo.caption ? `<div class="puppy-photo-caption">${escapeHtml(photo.caption)}</div>` : ''}
       </div>`).join('');
 

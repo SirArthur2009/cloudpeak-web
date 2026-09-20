@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://bvnurkvvhlmdapvhvcje.supabase.co" crossorigin />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Puppy gallery — Cloud Peak Silver Labradors." />
@@ -144,7 +145,7 @@ async function loadGallery() {
           return `
             <a href="puppy.html?puppy=${p.id}" class="puppy-gallery-card">
               <div class="puppy-gallery-img">
-                ${thumb ? `<img src="${thumb}" alt="${displayName}" loading="lazy" />` : `<i class="ti ti-paw" aria-hidden="true"></i>`}
+                ${thumb ? `<img decoding="async" src="${thumb}" alt="${displayName}" loading="lazy" />` : `<i class="ti ti-paw" aria-hidden="true"></i>`}
               </div>
               <div class="puppy-gallery-body">
                 <div class="puppy-gallery-name">
