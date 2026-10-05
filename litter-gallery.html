@@ -94,7 +94,7 @@ async function loadGallery() {
     const [litters, puppies, photos] = await Promise.all([
       db.select('litters', `select=*&id=eq.${litterId}`),
       db.select('puppies', `select=*&litter_id=eq.${litterId}&order=created_at`),
-      db.select('puppy_photos', `select=puppy_id,photo_url,sort_order&order=sort_order,created_at`).catch(() => [])
+      db.select('puppy_photos', `select=id,puppy_id,photo_url,sort_order,created_at&order=sort_order,created_at`).catch(() => [])
     ]);
 
     const litter = litters?.[0];
@@ -134,14 +134,14 @@ async function loadGallery() {
     // Map puppy_id → first photo
     const photoMap = {};
     (photos || []).forEach(ph => {
-      if (!photoMap[ph.puppy_id] && !/\.(mp4|webm|mov)(?:\?|$)/i.test(ph.photo_url)) photoMap[ph.puppy_id] = ph.photo_url;
+      (photoMap[ph.puppy_id] ||= []).push(ph);
     });
 
     container.innerHTML = `
       <div class="puppy-grid-gallery">
         ${puppies.map(p => {
           const displayName = p.name || `${p.collar_color || p.color || ''} collar`;
-          const thumb = photoMap[p.id] || p.photo_url;          const dot = collarHex(p.collar_color || '');
+          const thumb = latestPuppyImage(photoMap[p.id], p.photo_url);          const dot = collarHex(p.collar_color || '');
           return `
             <a href="puppy.html?puppy=${p.id}" class="puppy-gallery-card">
               <div class="puppy-gallery-img">

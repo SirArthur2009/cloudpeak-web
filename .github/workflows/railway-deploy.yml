@@ -1,0 +1,12 @@
+name: Deploy website and app to Railway
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    uses: SirArthur2009/cloudpeak-app/.github/workflows/railway-deploy.yml@main
+    secrets:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

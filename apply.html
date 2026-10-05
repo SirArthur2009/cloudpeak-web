@@ -255,7 +255,7 @@ async function submitApplication() {
 
     // Notify admins by email (best effort — don't block success if it fails)
     try {
-      await fetch('https://bvnurkvvhlmdapvhvcje.supabase.co/functions/v1/notify-application', {
+      await fetch(`${window.CLOUDPEAK_DATA_API_URL || 'https://bvnurkvvhlmdapvhvcje.supabase.co'}/functions/v1/notify-application`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

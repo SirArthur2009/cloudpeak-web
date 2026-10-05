@@ -204,7 +204,8 @@ async function loadPuppy() {
     document.getElementById('puppy-litter-name').textContent = litter?.name || '';
 
     // Hero image — first photo
-    const heroPhoto = allPhotos.find(photo => !isVideo(photo));
+    const heroUrl = latestPuppyImage(allPhotos, p.photo_url);
+    const heroPhoto = heroUrl ? { photo_url: heroUrl } : null;
     if (heroPhoto) {
       document.getElementById('hero-img').innerHTML =
         `<img decoding="async" fetchpriority="high" src="${escapeHtml(heroPhoto.photo_url)}" alt="${safeDisplayName}" style="width:100%;height:100%;object-fit:cover;" />`;

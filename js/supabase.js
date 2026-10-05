@@ -4,6 +4,17 @@
    ───────────────────────────────────────── */
 
 const SUPABASE_URL = 'https://bvnurkvvhlmdapvhvcje.supabase.co';
+const DATA_API_URL = window.CLOUDPEAK_DATA_API_URL || SUPABASE_URL;
+function latestPuppyImage(photos = [], fallback = '') {
+  let latest = null;
+  for (const photo of photos) {
+    if (!photo.photo_url || /\.(mp4|webm|mov)(?:\?|$)/i.test(photo.photo_url)) continue;
+    const time = Date.parse(photo.created_at) || 0;
+    const previousTime = Date.parse(latest?.created_at) || 0;
+    if (!latest || time > previousTime || (time === previousTime && Number(photo.id || photo.sort_order || 0) >= Number(latest.id || latest.sort_order || 0))) latest = photo;
+  }
+  return latest?.photo_url || fallback;
+}
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bnVya3Z2aGxtZGFwdmh2Y2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDQ3MDgsImV4cCI6MjA5MzY4MDcwOH0.ddHJhA-pktWJdkMqsUpgr_N11xG0z5yxm1XWqKZrT9Y';
 const ANALYTICS_TABLE = 'analytics_events';
 let analyticsSessionId = null;
@@ -101,7 +112,7 @@ function trackAnalyticsBeacon(eventName, properties = {}) {
     session_id: getAnalyticsSessionId(),
     properties,
   });
-  const url = `${SUPABASE_URL}/rest/v1/${ANALYTICS_TABLE}`;
+  const url = `${DATA_API_URL}/rest/v1/${ANALYTICS_TABLE}`;
   if (navigator.sendBeacon) {
     const blob = new Blob([payload], { type: 'application/json' });
     const ok = navigator.sendBeacon(url, blob);
@@ -209,13 +220,13 @@ async function loadFooter() {
 // ── Core fetch wrapper ──
 async function sbFetch(path, options = {}) {
   const method = options.method || 'GET';
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+  const res = await fetch(`${DATA_API_URL}/rest/v1/${path}`, {
     method,
     headers: {
       'apikey': SUPABASE_KEY,
       'Authorization': `Bearer ${SUPABASE_KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': options.prefer || (method === 'POST' ? 'return=representation' : ''),
+      'Prefer': options.prefer || (method === 'POST' ? (window.CLOUDPEAK_DATA_API_URL ? 'return=minimal' : 'return=representation') : ''),
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
