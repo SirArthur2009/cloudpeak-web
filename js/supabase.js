@@ -15,7 +15,7 @@ function latestPuppyImage(photos = [], fallback = '') {
   }
   return latest?.photo_url || fallback;
 }
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bnVya3Z2aGxtZGFwdmh2Y2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDQ3MDgsImV4cCI6MjA5MzY4MDcwOH0.ddHJhA-pktWJdkMqsUpgr_N11xG0z5yxm1XWqKZrT9Y';
+const SUPABASE_KEY = 'sb_publishable_0GVaywjIP4OrfuFNo0QtBA_dP-ahF79';
 const ANALYTICS_TABLE = 'analytics_events';
 let analyticsSessionId = null;
 let pageStartTime = null;
