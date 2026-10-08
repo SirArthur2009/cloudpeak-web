@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Host: cloudpeaksilverlabradors.com
 
 Sitemap: https://cloudpeaksilverlabradors.com/sitemap.xml
