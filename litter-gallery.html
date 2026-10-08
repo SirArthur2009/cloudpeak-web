@@ -103,6 +103,11 @@ async function loadGallery() {
     if (!litter) { window.location.href = 'gallery.html'; return; }
 
     document.title = `${litter.name} — Cloud Peak Silver Labradors`;
+    const canonical = new URL('https://cloudpeaksilverlabradors.com/litter-gallery.html');
+    canonical.searchParams.set('litter', litter.id);
+    document.querySelector('link[rel="canonical"]').href = canonical.href;
+    document.querySelector('meta[name="description"]').content =
+      `View photos of ${litter.name} Labrador puppies from Cloud Peak Silver Labradors in Wyoming.`;
     document.getElementById('litter-name').textContent = litter.name;
     document.getElementById('breadcrumb-name').textContent = litter.name;
 

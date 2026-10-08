@@ -194,6 +194,11 @@ async function loadPuppy() {
     const displayName = p.name || `${p.collar_color || p.color || ''} collar`;
     const safeDisplayName = escapeHtml(displayName);
     document.title = `${displayName} — Cloud Peak Silver Labradors`;
+    const canonical = new URL('https://cloudpeaksilverlabradors.com/puppy.html');
+    canonical.searchParams.set('puppy', p.id);
+    document.querySelector('link[rel="canonical"]').href = canonical.href;
+    document.querySelector('meta[name="description"]').content =
+      `View photos and details for ${displayName}, a ${p.color || 'Labrador'} puppy from Cloud Peak Silver Labradors in Wyoming.`;
 
     // Breadcrumb
     document.getElementById('breadcrumb-puppy').textContent = displayName;
