@@ -183,7 +183,7 @@ async function loadLitters() {
                   : 'Puppy details coming soon'}
               </div>
               <div class="litter-btns">
-                <a href="gallery.html" class="btn btn-outline btn-sm">View gallery</a>
+                <a href="litter-gallery.html?litter=${encodeURIComponent(l.id)}" class="btn btn-outline btn-sm">View gallery</a>
                 ${avail > 0 ? `<a href="apply.html" class="btn btn-dark btn-sm">Apply now</a>` : ''}
               </div>
             </div>
