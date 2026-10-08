@@ -7,6 +7,12 @@ permissions:
   contents: read
 jobs:
   deploy:
+    if: ${{ vars.WEBSITE_RAILWAY_SERVICE_ID == '' }}
     uses: SirArthur2009/cloudpeak-app/.github/workflows/railway-deploy.yml@main
+    secrets:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+  deploy-independent-website:
+    if: ${{ vars.WEBSITE_RAILWAY_SERVICE_ID != '' }}
+    uses: SirArthur2009/cloudpeak-app/.github/workflows/railway-website.yml@main
     secrets:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
